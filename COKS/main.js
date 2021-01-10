@@ -15,7 +15,7 @@ const ASSETS = {
 
     "map_chip": "./resource/map_chip.png?3",  // 背景チップ
 };
-
+const POWER_UP_TIME = 180;    // パワーアップ時間（フレーム数）
 // 定義
 const PL_STATUS = defineEnum({
     INIT: {
@@ -584,12 +584,12 @@ tm.define("GameScene", {
                             fontSize: 192,
                             width: SCREEN_WIDTH / 2,
                             height: SCREEN_HEIGHT,
-                            bgColor: "hsl(0, 100%, 50%)",
+                            bgColor: "hsl(60, 100%, 75%)",
                         }
                     ],
                     x: SCREEN_WIDTH / 4,
                     y: SCREEN_CENTER_Y,
-                    alpha: 0.1,
+                    alpha: 0.0,
                 },
                 {
                     type: "FlatButton", name: "keyRight",
@@ -600,12 +600,12 @@ tm.define("GameScene", {
                             fontSize: 192,
                             width: SCREEN_WIDTH / 2,
                             height: SCREEN_HEIGHT,
-                            bgColor: "hsl(120, 100%, 50%)",
+                            bgColor: "hsl(60, 100%, 70%)",
                         }
                     ],
                     x: SCREEN_CENTER_X + SCREEN_WIDTH / 4,
                     y: SCREEN_CENTER_Y,
-                    alpha: 0.1,
+                    alpha: 0.0,
                 },
             ]
         });
@@ -668,7 +668,7 @@ tm.define("GameScene", {
             let yy = player.yBgPos + 1;
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.UDON) {
                 // パワーアップ
-                player.powerUpTimer = 600;    // 600フレーム
+                player.powerUpTimer += POWER_UP_TIME;
             }
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.CUCUMBER) {
                 // 死亡
@@ -712,7 +712,7 @@ tm.define("GameScene", {
             let yy = player.yBgPos + 1;
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.UDON) {
                 // パワーアップ
-                player.powerUpTimer = 600;    // 600フレーム
+                player.powerUpTimer += POWER_UP_TIME;
             }
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.CUCUMBER) {
                 // 死亡
@@ -765,15 +765,20 @@ tm.define("GameScene", {
                 this.tweetButton.wakeUp();
                 this.restartButton.wakeUp();
             }
+            this.keyLeft.setAlpha(0.0);
+            this.keyRight.setAlpha(0.0);
         } else {
             if (!player.status.isStarted) {
                 this.gameOverLabel.setAlpha(0.0);
-                //                this.keyLeft.setAlpha(1.0);
-                //                this.keyRight.setAlpha(1.0);
+                this.keyLeft.setAlpha(0.0);
                 this.keyLeft.wakeUp();
+                this.keyRight.setAlpha(0.0);
                 this.keyRight.wakeUp();
                 player.status = PL_STATUS.START;
             }
+            this.keyLeft.setAlpha(0.0);
+            this.keyRight.setAlpha(0.0);
+
             if (player.powerUpTimer > 0) {
                 player.powerUpTimer--;
                 player.gotoAndPlay("nmls");
@@ -781,7 +786,25 @@ tm.define("GameScene", {
                 player.gotoAndPlay(player.aminBase + player.aminCount);
             }
 
-            enemy.yPos += 2;
+            if (player.depth <= 50) {
+                enemy.yPos += 2;
+            } else if (player.depth <= 100) {
+                enemy.yPos += 3;
+            } else if (player.depth <= 150) {
+                enemy.yPos += 4;
+            } else if (player.depth <= 200) {
+                enemy.yPos += 5;
+            } else if (player.depth <= 250) {
+                enemy.yPos += 6;
+            } else if (player.depth <= 300) {
+                enemy.yPos += 7;
+            } else {
+                enemy.yPos += 8;
+            }
+            if (enemy.yPos < -SCREEN_HEIGHT) {
+                enemy.yPos = -SCREEN_HEIGHT;
+            }
+
             this.nowScoreLabel.text = player.depth + "m";
         }
 
@@ -888,7 +911,7 @@ tm.define("Enemy", {
         this.direct = '';
         this.zRot = 0;
         this.xPos = SCREEN_CENTER_X;
-        this.yPos = -SCREEN_HEIGHT;
+        this.yPos = -SCREEN_HEIGHT + 1203;
         this.setPosition(this.xPos, this.yPos).setScale(1, 1);
         this.setInteractive(false);
         this.setBoundingType("rect");
