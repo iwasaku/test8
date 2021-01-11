@@ -189,6 +189,7 @@ const bgAppearMapChipTable = [
 // ratioは足して100になるようにする
 const bgAppearTable = [
     //                  [饂飩、胡瓜、地層0、地層1、地層2、地層3、地層4、地層5、岩石]
+    { line: 10, ratio_array: [3, 1, 95, 0, 0, 0, 0, 0, 1] },
     { line: 20, ratio_array: [3, 1, 70, 8, 7, 5, 3, 2, 1] },
     { line: 40, ratio_array: [3, 1, 8, 70, 7, 5, 3, 2, 1] },
     { line: 60, ratio_array: [3, 1, 8, 7, 70, 5, 3, 2, 1] },
@@ -856,8 +857,8 @@ tm.define("GameScene", {
             } else {
                 enemy.yPos += 8;
             }
-            if (enemy.yPos < -SCREEN_HEIGHT + 1203) {
-                enemy.yPos = -SCREEN_HEIGHT + 1203;
+            if (enemy.yPos < -SCREEN_HEIGHT - 150) {
+                enemy.yPos = -SCREEN_HEIGHT - 150;
             }
         }
         this.nowScoreLabel.text = player.depth + "m";
