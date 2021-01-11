@@ -9,12 +9,21 @@ const FPS = 60; // 60フレ
 
 const FONT_FAMILY = "'misaki_gothic','Meiryo',sans-serif";
 const ASSETS = {
-    "player": "./resource/utena_128.png",
     "nmls": "./resource/new_nmls_128.png",
     "boss": "./resource/boss.png",
 
     "map_chip": "./resource/map_chip.png?3",  // 背景チップ
 };
+const fallSE = new Howl({
+    src: 'https://iwasaku.github.io/test7/NEMLESSSTER/resource/fall.mp3?20200708'
+});
+const coinSE = new Howl({
+    src: 'https://iwasaku.github.io/test7/NEMLESSSTER/resource/coin05.mp3'
+});
+const explosionSE = new Howl({
+    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion.mp3'
+});
+
 const POWER_UP_TIME = 180;    // パワーアップ時間（フレーム数）
 // 定義
 const PL_STATUS = defineEnum({
@@ -22,21 +31,35 @@ const PL_STATUS = defineEnum({
         value: 0,
         isStarted: Boolean(0),  // スタートしてない
         isDead: Boolean(0),     // 死んでない
-        isAccKey: Boolean(0),   // キー入力を受付無い
+        isAccKey: Boolean(0),   // キー入力を受け付けない
         string: 'init'
     },
     START: {
         value: 1,
         isStarted: Boolean(1),  // スタート済み
         isDead: Boolean(0),     // 死んでない
-        isAccKey: Boolean(1),   // キー入力を受付無い
+        isAccKey: Boolean(1),   // キー入力を受け付ける
         string: 'start'
     },
-    DEAD: {
+    SHAKE: {
         value: 2,
+        isStarted: Boolean(1),  // スタート済み
+        isDead: Boolean(0),     // 死んでない
+        isAccKey: Boolean(0),   // キー入力を受け付けない
+        string: 'down'
+    },
+    DEAD_INIT: {
+        value: 3,
         isStarted: Boolean(0),  // スタートしてない
         isDead: Boolean(1),     // 死んだ
-        isAccKey: Boolean(0),   // キー入力を受付無い
+        isAccKey: Boolean(0),   // キー入力を受け付けない
+        string: 'dead_init'
+    },
+    DEAD: {
+        value: 4,
+        isStarted: Boolean(0),  // スタートしてない
+        isDead: Boolean(1),     // 死んだ
+        isAccKey: Boolean(0),   // キー入力を受け付けない
         string: 'dead'
     },
 });
@@ -370,6 +393,11 @@ const DIR_KEY_DEF = defineEnum({
 let player = null;
 let enemy = null;
 
+let shakeYPosTable = [
+    //    0, 2, -1, 4, -2, 8, -3, 16
+    0, 8, -1, 16, -2, 32, -3, 64
+];
+
 var randomSeed = 3557;
 var randomMode = Boolean(0);
 
@@ -528,7 +556,7 @@ tm.define("GameScene", {
                     fillStyle: "#fff",
                     shadowColor: "#000",
                     shadowBlur: 10,
-                    fontSize: 96,
+                    fontSize: 128,
                     fontFamily: FONT_FAMILY,
                     text: "0",
                     align: "right",
@@ -537,9 +565,9 @@ tm.define("GameScene", {
                     type: "Label", name: "gameOverLabel",
                     x: SCREEN_CENTER_X,
                     y: SCREEN_CENTER_Y - 32 - 16,
-                    fillStyle: "#000",
+                    fillStyle: "#fff",
                     shadowColor: "#000",
-                    shadowBlur: 0,
+                    shadowBlur: 50,
                     fontSize: 192,
                     fontFamily: FONT_FAMILY,
                     text: "GAME OVER",
@@ -669,13 +697,16 @@ tm.define("GameScene", {
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.UDON) {
                 // パワーアップ
                 player.powerUpTimer += POWER_UP_TIME;
+                coinSE.play();
             }
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.CUCUMBER) {
                 // 死亡
-                player.status = PL_STATUS.DEAD;
+                player.status = PL_STATUS.DEAD_INIT;
             } else {
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
+                player.status = PL_STATUS.SHAKE;
+                player.shakeTimer = 7;
             }
 
             if (player.isEven) player.isEven = false;
@@ -713,13 +744,16 @@ tm.define("GameScene", {
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.UDON) {
                 // パワーアップ
                 player.powerUpTimer += POWER_UP_TIME;
+                coinSE.play();
             }
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.CUCUMBER) {
                 // 死亡
-                player.status = PL_STATUS.DEAD;
+                player.status = PL_STATUS.DEAD_INIT;
             } else {
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
+                player.status = PL_STATUS.SHAKE;
+                player.shakeTimer = 7;
             }
 
             if (player.isEven) player.isEven = false;
@@ -738,15 +772,20 @@ tm.define("GameScene", {
     // main loop
     update: function (app) {
 
-        if (player.status === PL_STATUS.DEAD) {
+        if ((player.status === PL_STATUS.DEAD_INIT) || (player.status === PL_STATUS.DEAD)) {
+            if (player.status === PL_STATUS.DEAD_INIT) {
+                fallSE.play();
+                player.status = PL_STATUS.DEAD;
+            }
+
             var self = this;
             // tweet ボタン
             this.tweetButton.onclick = function () {
                 var twitterURL = tm.social.Twitter.createURL({
                     type: "tweet",
-                    text: "あいうえお",
+                    text: "C.O.K.S 地下" + player.depth + "m に到達",
                     hashtags: ["ネムレス", "NEMLESSS"],
-                    url: "https://iwasaku.github.io/test2/RogueLESSS/",
+                    url: "https://iwasaku.github.io/test8/COKS/",
                 });
                 window.open(twitterURL);
             };
@@ -767,6 +806,11 @@ tm.define("GameScene", {
             }
             this.keyLeft.setAlpha(0.0);
             this.keyRight.setAlpha(0.0);
+        } else if (player.status === PL_STATUS.SHAKE) {
+            if (--player.shakeTimer <= 0) {
+                player.status = PL_STATUS.START;
+                player.shakeTimer = 0;
+            }
         } else {
             if (!player.status.isStarted) {
                 this.gameOverLabel.setAlpha(0.0);
@@ -815,37 +859,6 @@ tm.define("GameScene", {
 /*
  * Player
  */
-tm.define("Player", {
-    superClass: "tm.app.Sprite",
-
-    init: function () {
-        this.superInit("player", 128, 128);
-        this.direct = '';
-        this.zRot = 0;
-        this.xBgPos = 4;
-        this.yBgPos = 5;
-        this.isEven = true;
-        this.xOfs = this.isEven ? 64 : 0;
-        this.xPos = (this.xBgPos * 128) + this.xOfs;
-        this.yPos = (this.yBgPos * 128) + 64;
-        this.setPosition(this.xPos, this.yPos).setScale(1, 1);
-        this.setInteractive(false);
-        this.setBoundingType("rect");
-        this.status = PL_STATUS.INIT;
-        this.depth = 0;
-    },
-
-    update: function (app) {
-        this.xOfs = this.isEven ? 0 : 64;
-        this.xPos = (this.xBgPos * 128) + this.xOfs;
-        this.yPos = (this.yBgPos * 128) + 64;
-        this.setPosition(this.xPos, this.yPos).setScale(1, 1);
-        if (enemy.yPos > SCREEN_CENTER_Y / 16) {
-            player.status = PL_STATUS.DEAD;
-        }
-    },
-});
-
 tm.define("PlayerSprite", {
     superClass: "tm.app.AnimationSprite",
     init: function () {
@@ -894,8 +907,10 @@ tm.define("PlayerSprite", {
         this.xPos = (this.xBgPos * 128) + this.xOfs;
         this.yPos = (this.yBgPos * 128) + 64;
         this.setPosition(this.xPos, this.yPos).setScale(1, 1);
-        if (enemy.yPos > SCREEN_CENTER_Y / 16) {
-            player.status = PL_STATUS.DEAD;
+        if (!player.status.isDead) {
+            if (enemy.yPos > SCREEN_CENTER_Y / 16) {
+                player.status = PL_STATUS.DEAD_INIT;
+            }
         }
     },
 });
@@ -970,6 +985,11 @@ tm.define("MapChipSprite", {
     },
 
     update: function (app) {
+        if (player != null) {
+            if (player.shakeTimer >= 0) {
+                this.setPosition(this.xPos, this.yPos + shakeYPosTable[player.shakeTimer]).setScale(1, 1);
+            }
+        }
     },
 });
 
