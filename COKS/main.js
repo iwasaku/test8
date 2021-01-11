@@ -794,7 +794,7 @@ tm.define("GameScene", {
             this.tweetButton.onclick = function () {
                 var twitterURL = tm.social.Twitter.createURL({
                     type: "tweet",
-                    text: "C.O.K.S 地下" + player.depth + "m に到達",
+                    text: "C.O.K.S. 地下" + player.depth + "m に到達",
                     hashtags: ["ネムレス", "NEMLESSS"],
                     url: "https://iwasaku.github.io/test8/COKS/",
                 });
@@ -856,8 +856,8 @@ tm.define("GameScene", {
             } else {
                 enemy.yPos += 8;
             }
-            if (enemy.yPos < -SCREEN_HEIGHT) {
-                enemy.yPos = -SCREEN_HEIGHT;
+            if (enemy.yPos < -SCREEN_HEIGHT + 1203) {
+                enemy.yPos = -SCREEN_HEIGHT + 1203;
             }
         }
         this.nowScoreLabel.text = player.depth + "m";
