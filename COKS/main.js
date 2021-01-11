@@ -20,8 +20,17 @@ const fallSE = new Howl({
 const coinSE = new Howl({
     src: 'https://iwasaku.github.io/test7/NEMLESSSTER/resource/coin05.mp3'
 });
-const explosionSE = new Howl({
-    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion.mp3'
+const explosion0SE = new Howl({
+    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_0.mp3'
+});
+const explosion1SE = new Howl({
+    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_1.mp3'
+});
+const explosion2SE = new Howl({
+    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_2.mp3'
+});
+const explosion3SE = new Howl({
+    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_3.mp3'
 });
 
 const POWER_UP_TIME = 180;    // パワーアップ時間（フレーム数）
@@ -346,7 +355,7 @@ function decideBgMapChipDef(nowLine) {
     for (let ii = 0; ii < bgAppearTable.length; ii++) {
         let tmp = bgAppearTable[ii];
         if (nowLine > tmp.line) continue;
-        let target = Math.floor(Math.random() * 100) + 1;   // 1~100
+        let target = myRandom(1, 100);
         for (let jj = 0; jj < tmp.ratio_array.length; jj++) {
             tmpRatio += tmp.ratio_array[jj];
             if (tmpRatio < target) {
@@ -524,6 +533,7 @@ tm.define("GameScene", {
 
     init: function () {
         this.superInit();
+        if (!randomMode) randomSeed = 3557;
 
         for (let ii = 0; ii < bgAppearTable.length; ii++) {
             let total = 0;
@@ -703,7 +713,7 @@ tm.define("GameScene", {
                 // 死亡
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
-                explosionSE.play();
+                playExplosion();
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
@@ -751,7 +761,7 @@ tm.define("GameScene", {
                 // 死亡
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
-                explosionSE.play();
+                playExplosion();
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
@@ -767,7 +777,6 @@ tm.define("GameScene", {
 
         this.nowScoreLabel.text = "0m";
         this.buttonAlpha = 0.0;
-
         frame = 0;
     },
 
@@ -909,7 +918,7 @@ tm.define("PlayerSprite", {
         this.yPos = (this.yBgPos * 128) + 64;
         this.setPosition(this.xPos, this.yPos).setScale(1, 1);
         if (!player.status.isDead) {
-            if (enemy.yPos > SCREEN_CENTER_Y / 16) {
+            if (enemy.yPos > SCREEN_CENTER_Y / 32) {
                 player.status = PL_STATUS.DEAD_INIT;
             }
         }
@@ -1002,7 +1011,23 @@ function chkMapColi(xx, yy) {
     return getMapChipDef(xx, yy).collision;
 }
 
-
+function playExplosion() {
+    let target = Math.floor(Math.random() * 4);   // 0~3
+    switch (target) {
+        case 0:
+            explosion0SE.play();
+            break;
+        case 1:
+            explosion1SE.play();
+            break;
+        case 2:
+            explosion2SE.play();
+            break;
+        case 3:
+            explosion3SE.play();
+            break;
+    }
+}
 // 指定の範囲で乱数を求める
 // ※start < end
 // ※startとendを含む
