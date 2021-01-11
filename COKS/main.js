@@ -569,7 +569,7 @@ tm.define("GameScene", {
                     fontSize: 128,
                     fontFamily: FONT_FAMILY,
                     text: "0",
-                    align: "right",
+                    align: "center",
                 },
                 {
                     type: "Label", name: "gameOverLabel",
