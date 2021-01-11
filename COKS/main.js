@@ -90,6 +90,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: false,
         hp: 0,
         se: null,
+        point: 0,
         string: 'dark'
     },
 
@@ -100,6 +101,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: false,
         hp: 0,
         se: null,
+        point: 0,
         string: 'dark'
     },
 
@@ -110,6 +112,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: true,
         hp: 0,
         se: null,
+        point: 1,
         string: 'udon'
     },
 
@@ -120,6 +123,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: true,
         hp: 0,
         se: null,
+        point: 0,
         string: 'cucunmber'
     },
 
@@ -129,6 +133,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 1,
+        point: 1,
         se: explosion0SE,
         string: 'strata_0'
     },
@@ -139,6 +144,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 2,
+        point: 2,
         se: explosion1SE,
         string: 'strata_1'
     },
@@ -149,6 +155,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 3,
+        point: 4,
         se: explosion2SE,
         string: 'strata_2'
     },
@@ -159,6 +166,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 4,
+        point: 8,
         se: explosion3SE,
         string: 'strata_3'
     },
@@ -169,6 +177,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 5,
+        point: 16,
         se: explosion4SE,
         string: 'strata_4'
     },
@@ -179,6 +188,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 6,
+        point: 32,
         se: explosion5SE,
         string: 'strata_5'
     },
@@ -189,6 +199,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 10,
+        point: 256,
         se: explosion6SE,
         string: 'rock'
     },
@@ -586,9 +597,21 @@ tm.define("GameScene", {
         this.fromJSON({
             children: [
                 {
-                    type: "Label", name: "nowScoreLabel",
+                    type: "Label", name: "nowDepthLabel",
                     x: SCREEN_CENTER_X,
                     y: 64,
+                    fillStyle: "#fff",
+                    shadowColor: "#000",
+                    shadowBlur: 10,
+                    fontSize: 128,
+                    fontFamily: FONT_FAMILY,
+                    text: "0m",
+                    align: "center",
+                },
+                {
+                    type: "Label", name: "nowScoreLabel",
+                    x: SCREEN_CENTER_X,
+                    y: SCREEN_HEIGHT - 64,
                     fillStyle: "#fff",
                     shadowColor: "#000",
                     shadowBlur: 10,
@@ -740,6 +763,7 @@ tm.define("GameScene", {
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
                 if (getBgDataArray(xx, yy).kind.se != null) getBgDataArray(xx, yy).kind.se.play();
+                player.score += getBgDataArray(xx, yy).kind.point;
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
@@ -788,6 +812,7 @@ tm.define("GameScene", {
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
                 if (getBgDataArray(xx, yy).kind.se != null) getBgDataArray(xx, yy).kind.se.play();
+                player.score += getBgDataArray(xx, yy).kind.point;
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
@@ -801,7 +826,8 @@ tm.define("GameScene", {
             enemy.yPos -= 128;
         };
 
-        this.nowScoreLabel.text = "0m";
+        this.nowDepthLabel.text = "0m";
+        this.nowScoreLabel.text = "9999";
         this.buttonAlpha = 0.0;
         frame = 0;
     },
@@ -820,7 +846,7 @@ tm.define("GameScene", {
             this.tweetButton.onclick = function () {
                 var twitterURL = tm.social.Twitter.createURL({
                     type: "tweet",
-                    text: "C.O.K.S. 地下" + player.depth + "m に到達",
+                    text: "C.O.K.S. 地下" + player.depth + "m に到達（スコア：" + player.score + "）",
                     hashtags: ["ネムレス", "NEMLESSS"],
                     url: "https://iwasaku.github.io/test8/COKS/",
                 });
@@ -886,7 +912,8 @@ tm.define("GameScene", {
                 enemy.yPos = -SCREEN_HEIGHT - 150;
             }
         }
-        this.nowScoreLabel.text = player.depth + "m";
+        this.nowDepthLabel.text = player.depth + "m";
+        this.nowScoreLabel.text = player.score;
 
         ++frame;
     }
@@ -935,6 +962,7 @@ tm.define("PlayerSprite", {
 
         this.status = PL_STATUS.INIT;
         this.depth = 0;
+        this.score = 0;
         this.powerUpTimer = 0;
     },
 
