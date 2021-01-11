@@ -209,6 +209,9 @@ const bgAppearMapChipTable = [
 // ratioは足して100になるようにする
 const bgAppearTable = [
     //                  [饂飩、胡瓜、地層0、地層1、地層2、地層3、地層4、地層5、岩石]
+    { line: 3, ratio_array: [3, 1, 95, 0, 0, 0, 0, 0, 1] },
+    { line: 4, ratio_array: [3, 1, 0, 95, 0, 0, 0, 0, 1] },
+    { line: 5, ratio_array: [3, 1, 0, 0, 95, 0, 0, 0, 1] },
     { line: 10, ratio_array: [3, 1, 95, 0, 0, 0, 0, 0, 1] },
     { line: 20, ratio_array: [3, 1, 70, 8, 7, 5, 3, 2, 1] },
     { line: 40, ratio_array: [3, 1, 8, 70, 7, 5, 3, 2, 1] },
@@ -734,7 +737,7 @@ tm.define("GameScene", {
                 // 死亡
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
-                playExplosion();
+                if (getBgDataArray(xx, yy).kind.se != null) getBgDataArray(xx, yy).kind.se.play();
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
@@ -782,7 +785,7 @@ tm.define("GameScene", {
                 // 死亡
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
-                playExplosion();
+                if (getBgDataArray(xx, yy).kind.se != null) getBgDataArray(xx, yy).kind.se.play();
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
@@ -1024,31 +1027,6 @@ tm.define("MapChipSprite", {
     },
 });
 
-function getMapChipDef(xx, yy) {
-    return MAP_CHIP_DEF.getByValue('value', getBgDataArray(xx, yy));
-}
-
-function chkMapColi(xx, yy) {
-    return getMapChipDef(xx, yy).collision;
-}
-
-function playExplosion() {
-    let target = Math.floor(Math.random() * 4);   // 0~3
-    switch (target) {
-        case 0:
-            explosion0SE.play();
-            break;
-        case 1:
-            explosion1SE.play();
-            break;
-        case 2:
-            explosion2SE.play();
-            break;
-        case 3:
-            explosion3SE.play();
-            break;
-    }
-}
 // 指定の範囲で乱数を求める
 // ※start < end
 // ※startとendを含む
