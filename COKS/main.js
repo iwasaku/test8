@@ -383,6 +383,7 @@ function makeBgData(yy) {
             let mapChipDef = decideBgMapChipDef(nowLine);
             if ((nowLine === 4) && (xx === 1)) mapChipDef = MAP_CHIP_DEF.STRATA_1;
             else if ((nowLine === 4) && (xx === 2)) mapChipDef = MAP_CHIP_DEF.UDON;
+            else if (nowLine % 100 === 0) mapChipDef = MAP_CHIP_DEF.ROCK;
             setBgDataArray(xx, yy, new MapChipSprite(xx, yy, isEven, mapChipDef).addChildTo(group0));
         }
     }
