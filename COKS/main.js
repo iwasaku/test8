@@ -32,6 +32,15 @@ const explosion2SE = new Howl({
 const explosion3SE = new Howl({
     src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_3.mp3'
 });
+const explosion4SE = new Howl({
+    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_4.mp3'
+});
+const explosion5SE = new Howl({
+    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_5.mp3'
+});
+const explosion6SE = new Howl({
+    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_6.mp3'
+});
 
 const POWER_UP_TIME = 180;    // パワーアップ時間（フレーム数）
 // 定義
@@ -80,6 +89,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: false,
         is_item: false,
         hp: 0,
+        se: null,
         string: 'dark'
     },
 
@@ -89,6 +99,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: false,
         is_item: false,
         hp: 0,
+        se: null,
         string: 'dark'
     },
 
@@ -98,6 +109,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: false,
         is_item: true,
         hp: 0,
+        se: null,
         string: 'udon'
     },
 
@@ -107,6 +119,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: false,
         is_item: true,
         hp: 0,
+        se: null,
         string: 'cucunmber'
     },
 
@@ -116,6 +129,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 1,
+        se: explosion0SE,
         string: 'strata_0'
     },
 
@@ -125,6 +139,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 2,
+        se: explosion1SE,
         string: 'strata_1'
     },
 
@@ -134,6 +149,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 3,
+        se: explosion2SE,
         string: 'strata_2'
     },
 
@@ -143,6 +159,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 4,
+        se: explosion3SE,
         string: 'strata_3'
     },
 
@@ -152,6 +169,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 5,
+        se: explosion4SE,
         string: 'strata_4'
     },
 
@@ -161,6 +179,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 6,
+        se: explosion5SE,
         string: 'strata_5'
     },
 
@@ -170,6 +189,7 @@ const MAP_CHIP_DEF = defineEnum({
         collision: true,
         is_item: false,
         hp: 10,
+        se: explosion6SE,
         string: 'rock'
     },
 });
