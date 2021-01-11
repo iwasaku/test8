@@ -703,6 +703,7 @@ tm.define("GameScene", {
                 // 死亡
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
+                explosionSE.play();
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
@@ -750,6 +751,7 @@ tm.define("GameScene", {
                 // 死亡
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
+                explosionSE.play();
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
@@ -848,9 +850,8 @@ tm.define("GameScene", {
             if (enemy.yPos < -SCREEN_HEIGHT) {
                 enemy.yPos = -SCREEN_HEIGHT;
             }
-
-            this.nowScoreLabel.text = player.depth + "m";
         }
+        this.nowScoreLabel.text = player.depth + "m";
 
         ++frame;
     }
