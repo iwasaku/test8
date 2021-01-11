@@ -370,6 +370,8 @@ function makeBgData(yy) {
                 }
             }
             let mapChipDef = decideBgMapChipDef(nowLine);
+            if ((nowLine === 4) && (xx === 1)) mapChipDef = MAP_CHIP_DEF.STRATA_1;
+            else if ((nowLine === 4) && (xx === 2)) mapChipDef = MAP_CHIP_DEF.UDON;
             setBgDataArray(xx, yy, new MapChipSprite(xx, yy, isEven, mapChipDef).addChildTo(group0));
         }
     }
@@ -598,7 +600,7 @@ tm.define("GameScene", {
                 {
                     type: "Label", name: "gameOverLabel",
                     x: SCREEN_CENTER_X,
-                    y: SCREEN_CENTER_Y - 32 - 16,
+                    y: SCREEN_CENTER_Y - 512,
                     fillStyle: "#fff",
                     shadowColor: "#000",
                     shadowBlur: 50,
