@@ -764,6 +764,9 @@ tm.define("GameScene", {
             } else {
                 if (getBgDataArray(xx, yy).kind.se != null) getBgDataArray(xx, yy).kind.se.play();
                 player.score += getBgDataArray(xx, yy).kind.point;
+                if (player.powerUpTimer > 0) {
+                    player.score += getBgDataArray(xx, yy).kind.point;
+                }
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
@@ -813,6 +816,9 @@ tm.define("GameScene", {
             } else {
                 if (getBgDataArray(xx, yy).kind.se != null) getBgDataArray(xx, yy).kind.se.play();
                 player.score += getBgDataArray(xx, yy).kind.point;
+                if (player.powerUpTimer > 0) {
+                    player.score += getBgDataArray(xx, yy).kind.point;
+                }
                 getBgDataArray(xx, yy).remove();
                 setBgDataArray(xx, yy, new MapChipSprite(xx, yy, getBgDataIsEven(yy), MAP_CHIP_DEF.BLANK).addChildTo(group0));
                 player.status = PL_STATUS.SHAKE;
