@@ -224,6 +224,7 @@ const bgAppearTable = [
     { line: 4, ratio_array: [3, 1, 0, 95, 0, 0, 0, 0, 1] },
     { line: 5, ratio_array: [3, 1, 0, 0, 95, 0, 0, 0, 1] },
     { line: 10, ratio_array: [3, 1, 95, 0, 0, 0, 0, 0, 1] },
+
     { line: 20, ratio_array: [3, 1, 70, 8, 7, 5, 3, 2, 1] },
     { line: 40, ratio_array: [3, 1, 8, 70, 7, 5, 3, 2, 1] },
     { line: 60, ratio_array: [3, 1, 8, 7, 70, 5, 3, 2, 1] },
@@ -273,7 +274,56 @@ const bgAppearTable = [
     { line: 840, ratio_array: [3, 3, 17, 16, 15, 14, 20, 11, 1] },
     { line: 860, ratio_array: [3, 3, 17, 16, 15, 14, 11, 20, 1] },
 
-    { line: 2100000000, ratio_array: [3, 3, 15, 15, 15, 16, 16, 16, 1] },
+    { line: 880, ratio_array: [3, 1, 69, 8, 7, 5, 3, 2, 2] },
+    { line: 900, ratio_array: [3, 1, 8, 69, 7, 5, 3, 2, 2] },
+    { line: 920, ratio_array: [3, 1, 8, 7, 69, 5, 3, 2, 2] },
+    { line: 940, ratio_array: [3, 1, 8, 7, 5, 69, 3, 2, 2] },
+    { line: 960, ratio_array: [3, 1, 8, 7, 5, 3, 69, 2, 2] },
+    { line: 980, ratio_array: [3, 1, 8, 7, 5, 3, 2, 69, 2] },
+
+    { line: 1000, ratio_array: [3, 2, 69, 7, 6, 5, 4, 2, 2] },
+    { line: 1050, ratio_array: [3, 2, 7, 69, 6, 5, 4, 2, 2] },
+    { line: 1100, ratio_array: [3, 2, 7, 6, 69, 5, 4, 2, 2] },
+    { line: 1150, ratio_array: [3, 2, 7, 6, 5, 69, 4, 2, 2] },
+    { line: 1200, ratio_array: [3, 2, 7, 6, 5, 4, 69, 2, 2] },
+    { line: 1250, ratio_array: [3, 2, 7, 6, 5, 4, 2, 69, 2] },
+
+    { line: 1300, ratio_array: [3, 2, 59, 10, 8, 7, 6, 3, 2] },
+    { line: 1350, ratio_array: [3, 2, 10, 59, 8, 7, 6, 3, 2] },
+    { line: 1400, ratio_array: [3, 2, 10, 8, 59, 7, 6, 3, 2] },
+    { line: 1450, ratio_array: [3, 2, 10, 8, 7, 59, 6, 3, 2] },
+    { line: 1500, ratio_array: [3, 2, 10, 8, 7, 6, 59, 3, 2] },
+    { line: 1550, ratio_array: [3, 2, 10, 8, 7, 6, 3, 59, 2] },
+
+    { line: 1600, ratio_array: [3, 3, 49, 11, 10, 9, 7, 6, 2] },
+    { line: 1650, ratio_array: [3, 3, 11, 49, 10, 9, 7, 6, 2] },
+    { line: 1700, ratio_array: [3, 3, 11, 10, 49, 9, 7, 6, 2] },
+    { line: 1750, ratio_array: [3, 3, 11, 10, 9, 49, 7, 6, 2] },
+    { line: 1800, ratio_array: [3, 3, 11, 10, 9, 7, 49, 6, 2] },
+    { line: 1850, ratio_array: [3, 3, 11, 10, 9, 7, 6, 49, 2] },
+
+    { line: 1900, ratio_array: [3, 3, 39, 13, 12, 11, 9, 8, 2] },
+    { line: 1950, ratio_array: [3, 3, 13, 39, 12, 11, 9, 8, 2] },
+    { line: 2000, ratio_array: [3, 3, 12, 12, 39, 11, 9, 8, 3] },
+    { line: 2100, ratio_array: [3, 3, 12, 12, 11, 39, 9, 8, 3] },
+    { line: 2200, ratio_array: [3, 3, 12, 12, 11, 9, 39, 8, 3] },
+    { line: 2300, ratio_array: [3, 3, 12, 12, 11, 9, 8, 39, 3] },
+
+    { line: 2400, ratio_array: [3, 3, 29, 14, 14, 13, 11, 10, 3] },
+    { line: 2500, ratio_array: [3, 3, 14, 28, 14, 13, 11, 10, 4] },
+    { line: 2600, ratio_array: [3, 3, 14, 14, 28, 13, 11, 10, 4] },
+    { line: 2700, ratio_array: [3, 3, 14, 14, 13, 28, 11, 10, 4] },
+    { line: 2800, ratio_array: [3, 3, 14, 14, 13, 11, 28, 10, 4] },
+    { line: 2900, ratio_array: [3, 3, 14, 14, 13, 11, 10, 28, 4] },
+
+    { line: 3000, ratio_array: [3, 3, 18, 15, 16, 15, 14, 11, 5] },
+    { line: 3100, ratio_array: [3, 3, 15, 18, 16, 15, 14, 11, 5] },
+    { line: 3200, ratio_array: [3, 3, 15, 16, 18, 15, 14, 11, 5] },
+    { line: 3300, ratio_array: [3, 3, 15, 16, 15, 18, 14, 11, 5] },
+    { line: 3400, ratio_array: [3, 3, 15, 16, 15, 14, 18, 11, 5] },
+    { line: 3500, ratio_array: [3, 3, 15, 16, 15, 14, 11, 17, 6] },
+
+    { line: 2100000000, ratio_array: [3, 3, 14, 14, 14, 14, 16, 16, 7] },
 ];
 const BG_WIDTH = 10;// BG幅（キャラ数）
 const BG_HEIGHT = 20;// BG高さ（キャラ数）
@@ -580,7 +630,7 @@ tm.define("GameScene", {
                 total += tmp.ratio_array[jj];
             }
             if (total != 100) {
-                console.log("ii=" + ii + " is not 100")
+                console.log("line=" + tmp.line + " is not 100")
             }
         }
         group0 = tm.display.CanvasElement().addChildTo(this);   // BG
@@ -767,7 +817,7 @@ tm.define("GameScene", {
                 player.score += getBgDataArray(xx, yy).kind.point;
                 if (player.powerUpTimer > 0) {
                     if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.ROCK) {
-                        player.powerUpTimer -= 60;
+                        player.powerUpTimer -= parseInt(player.powerUpTimer / 2);
                     }
                     player.score += getBgDataArray(xx, yy).kind.point;
                 }
@@ -822,7 +872,7 @@ tm.define("GameScene", {
                 player.score += getBgDataArray(xx, yy).kind.point;
                 if (player.powerUpTimer > 0) {
                     if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.ROCK) {
-                        player.powerUpTimer -= 60;
+                        player.powerUpTimer -= parseInt(player.powerUpTimer / 2);
                     }
                     player.score += getBgDataArray(xx, yy).kind.point;
                 }
@@ -919,8 +969,16 @@ tm.define("GameScene", {
                 enemy.yPos += 6;
             } else if (player.depth <= 300) {
                 enemy.yPos += 7;
-            } else {
+            } else if (player.depth <= 1000) {
                 enemy.yPos += 8;
+            } else if (player.depth <= 1500) {
+                enemy.yPos += 9;
+            } else if (player.depth <= 2000) {
+                enemy.yPos += 10;
+            } else if (player.depth <= 3000) {
+                enemy.yPos += 11;
+            } else {
+                enemy.yPos += 12;
             }
             if (enemy.yPos < -SCREEN_HEIGHT - 150) {
                 enemy.yPos = -SCREEN_HEIGHT - 150;
