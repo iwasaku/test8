@@ -647,7 +647,6 @@ tm.define("GameScene", {
             makeBgData(yy);
         }
 
-        //        player = new Player().addChildTo(group1);
         player = new PlayerSprite().addChildTo(group1);
         enemy = new Enemy().addChildTo(group1);
 
@@ -770,7 +769,7 @@ tm.define("GameScene", {
             }
             // BG配列の初期化
             let tmpLine = -4;
-            for (let yy = 0; yy < BG_HEIGHT - 1; yy++) {
+            for (let yy = 0; yy < BG_HEIGHT; yy++) {
                 setBgDataLine(yy, tmpLine++);
             }
             // playerのremove
