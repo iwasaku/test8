@@ -472,7 +472,7 @@ class CharaStatus {
 
 // 表示プライオリティは 0：奥 → 4：手前 の順番
 let group0 = null;  // bg
-let group1 = null;  // player, enemy
+let group1 = null;  // player, boss, enemy
 let group2 = null;  // status
 
 const DIR_KEY_DEF = defineEnum({
@@ -494,7 +494,7 @@ const DIR_KEY_DEF = defineEnum({
 });
 
 let player = null;
-let enemy = null;
+let boss = null;
 
 let shakeYPosTable = [
     //    0, 2, -1, 4, -2, 8, -3, 16
@@ -648,7 +648,7 @@ tm.define("GameScene", {
         }
 
         player = new PlayerSprite().addChildTo(group1);
-        enemy = new Enemy().addChildTo(group1);
+        boss = new Boss().addChildTo(group1);
 
         this.fromJSON({
             children: [
@@ -777,10 +777,10 @@ tm.define("GameScene", {
                 player.remove();
                 player = null;
             }
-            // enemyのremove
-            if (enemy != null) {
-                enemy.remove();
-                enemy = null;
+            // bossのremove
+            if (boss != null) {
+                boss.remove();
+                boss = null;
             }
             self.app.replaceScene(GameScene());
         };
@@ -838,7 +838,7 @@ tm.define("GameScene", {
             player.isEven = (getBgDataLine(yy) % 2 != 0);
             scrollBgData();
             player.depth++;
-            enemy.yPos -= 128;
+            boss.yPos -= 128;
         };
 
         this.keyRight.sleep();
@@ -893,7 +893,7 @@ tm.define("GameScene", {
             else player.isEven = true;
             scrollBgData();
             player.depth++;
-            enemy.yPos -= 128;
+            boss.yPos -= 128;
         };
 
         this.nowDepthLabel.text = "0m";
@@ -964,32 +964,45 @@ tm.define("GameScene", {
                 player.gotoAndPlay(player.aminBase + player.aminCount);
             }
 
+            var ySpd = 0;
+            var yLmt = 0;
             if (player.depth <= 50) {
-                enemy.yPos += 2;
+                ySpd = 2;
+                yLmt = -150;
             } else if (player.depth <= 100) {
-                enemy.yPos += 3;
+                ySpd = 3;
+                yLmt = -100;
             } else if (player.depth <= 150) {
-                enemy.yPos += 4;
+                ySpd = 4;
+                yLmt = -50;
             } else if (player.depth <= 200) {
-                enemy.yPos += 5;
+                ySpd = 5;
+                yLmt = 0;
             } else if (player.depth <= 250) {
-                enemy.yPos += 6;
+                ySpd = 6;
+                yLmt = 100;
             } else if (player.depth <= 300) {
-                enemy.yPos += 7;
+                ySpd = 7;
+                yLmt = 500;
             } else if (player.depth <= 1000) {
-                enemy.yPos += 8;
+                ySpd = 8;
+                yLmt = 1000;
             } else if (player.depth <= 1500) {
-                enemy.yPos += 9;
+                ySpd = 9;
+                yLmt = 1050;
             } else if (player.depth <= 2000) {
-                enemy.yPos += 10;
+                ySpd = 10;
+                yLmt = 1100;
             } else if (player.depth <= 3000) {
-                enemy.yPos += 11;
+                ySpd = 11;
+                yLmt = 1150;
             } else {
-                enemy.yPos += 12;
+                ySpd = 12;
+                yLmt = 1200;
             }
-
-            if (enemy.yPos < -SCREEN_HEIGHT - 150) {
-                enemy.yPos = -SCREEN_HEIGHT - 150;
+            boss.yPos += ySpd;
+            if (boss.yPos < -SCREEN_HEIGHT + yLmt) {
+                boss.yPos = -SCREEN_HEIGHT + yLmt;
             }
         }
         //        this.nowDepthLabel.text = player.depth + "m\nPUT=" + player.powerUpTimer;
@@ -1053,7 +1066,7 @@ tm.define("PlayerSprite", {
         this.yPos = (this.yBgPos * 128) + 64;
         this.setPosition(this.xPos, this.yPos).setScale(1, 1);
         if (!player.status.isDead) {
-            if (enemy.yPos > SCREEN_CENTER_Y / 32) {
+            if (boss.yPos > SCREEN_CENTER_Y / 32) {
                 player.status = PL_STATUS.DEAD_INIT;
             }
         }
@@ -1061,9 +1074,9 @@ tm.define("PlayerSprite", {
 });
 
 /*
- * Enemy
+ * Boss
  */
-tm.define("Enemy", {
+tm.define("Boss", {
     superClass: "tm.app.Sprite",
 
     init: function () {
