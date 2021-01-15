@@ -42,7 +42,8 @@ const explosion6SE = new Howl({
     src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_6.mp3'
 });
 
-const POWER_UP_TIME = 180;    // パワーアップ時間（フレーム数）
+const POWER_UP_TIME = 3 * FPS;    // パワーアップ時間
+const MAX_POWER_UP_TIME = 10 * FPS;    // 最長パワーアップ時間
 // 定義
 const PL_STATUS = defineEnum({
     INIT: {
@@ -226,108 +227,109 @@ const bgAppearTable = [
     { line: 10, ratio_array: [3, 1, 95, 0, 0, 0, 0, 0, 1] },
 
     { line: 20, ratio_array: [3, 1, 70, 8, 7, 5, 3, 2, 1] },
-    { line: 40, ratio_array: [3, 1, 8, 70, 7, 5, 3, 2, 1] },
-    { line: 60, ratio_array: [3, 1, 8, 7, 70, 5, 3, 2, 1] },
-    { line: 80, ratio_array: [3, 1, 8, 7, 5, 70, 3, 2, 1] },
-    { line: 100, ratio_array: [3, 1, 8, 7, 5, 3, 70, 2, 1] },
-    { line: 120, ratio_array: [3, 1, 8, 7, 5, 3, 2, 70, 1] },
+    { line: 40, ratio_array: [3, 1, 8, 69, 7, 5, 3, 2, 2] },
+    { line: 60, ratio_array: [3, 1, 8, 7, 68, 5, 3, 2, 3] },
+    { line: 80, ratio_array: [3, 1, 8, 7, 5, 67, 3, 2, 4] },
+    { line: 100, ratio_array: [3, 1, 8, 7, 5, 3, 66, 2, 5] },
+    { line: 120, ratio_array: [3, 1, 8, 7, 5, 3, 2, 65, 6] },
 
-    { line: 140, ratio_array: [3, 2, 70, 7, 6, 5, 4, 2, 1] },
-    { line: 160, ratio_array: [3, 2, 7, 70, 6, 5, 4, 2, 1] },
-    { line: 180, ratio_array: [3, 2, 7, 6, 70, 5, 4, 2, 1] },
-    { line: 200, ratio_array: [3, 2, 7, 6, 5, 70, 4, 2, 1] },
-    { line: 220, ratio_array: [3, 2, 7, 6, 5, 4, 70, 2, 1] },
-    { line: 240, ratio_array: [3, 2, 7, 6, 5, 4, 2, 70, 1] },
+    { line: 140, ratio_array: [3, 2, 64, 7, 6, 5, 4, 2, 7] },
+    { line: 160, ratio_array: [3, 2, 7, 63, 6, 5, 4, 2, 8] },
+    { line: 180, ratio_array: [3, 2, 7, 6, 62, 5, 4, 2, 9] },
+    { line: 200, ratio_array: [3, 2, 7, 6, 5, 61, 4, 2, 10] },
+    { line: 220, ratio_array: [3, 2, 7, 6, 5, 4, 61, 2, 10] },
+    { line: 240, ratio_array: [3, 2, 7, 6, 5, 4, 2, 60, 11] },
 
-    { line: 260, ratio_array: [3, 2, 60, 10, 8, 7, 6, 3, 1] },
-    { line: 280, ratio_array: [3, 2, 10, 60, 8, 7, 6, 3, 1] },
-    { line: 300, ratio_array: [3, 2, 10, 8, 60, 7, 6, 3, 1] },
-    { line: 320, ratio_array: [3, 2, 10, 8, 7, 60, 6, 3, 1] },
-    { line: 340, ratio_array: [3, 2, 10, 8, 7, 6, 60, 3, 1] },
-    { line: 360, ratio_array: [3, 2, 10, 8, 7, 6, 3, 60, 1] },
+    { line: 260, ratio_array: [3, 2, 50, 10, 8, 7, 5, 4, 11] },
+    { line: 280, ratio_array: [3, 2, 10, 49, 8, 7, 5, 4, 12] },
+    { line: 300, ratio_array: [3, 2, 10, 8, 49, 7, 5, 4, 12] },
+    { line: 320, ratio_array: [3, 2, 10, 8, 7, 48, 5, 4, 13] },
+    { line: 340, ratio_array: [3, 2, 10, 8, 7, 5, 48, 4, 13] },
+    { line: 360, ratio_array: [3, 2, 10, 8, 7, 5, 4, 47, 14] },
 
-    { line: 380, ratio_array: [3, 3, 50, 11, 10, 9, 7, 6, 1] },
-    { line: 400, ratio_array: [3, 3, 11, 50, 10, 9, 7, 6, 1] },
-    { line: 420, ratio_array: [3, 3, 11, 10, 50, 9, 7, 6, 1] },
-    { line: 440, ratio_array: [3, 3, 11, 10, 9, 50, 7, 6, 1] },
-    { line: 460, ratio_array: [3, 3, 11, 10, 9, 7, 50, 6, 1] },
-    { line: 480, ratio_array: [3, 3, 11, 10, 9, 7, 6, 50, 1] },
+    { line: 380, ratio_array: [3, 3, 37, 11, 10, 9, 7, 6, 14] },
+    { line: 400, ratio_array: [3, 3, 11, 36, 10, 9, 7, 6, 15] },
+    { line: 420, ratio_array: [3, 3, 11, 10, 36, 9, 7, 6, 15] },
+    { line: 440, ratio_array: [3, 3, 11, 10, 9, 35, 7, 6, 16] },
+    { line: 460, ratio_array: [3, 3, 11, 10, 9, 7, 35, 6, 16] },
+    { line: 480, ratio_array: [3, 3, 11, 10, 9, 7, 6, 34, 17] },
 
-    { line: 500, ratio_array: [3, 3, 40, 13, 12, 11, 9, 8, 1] },
-    { line: 520, ratio_array: [3, 3, 13, 40, 12, 11, 9, 8, 1] },
-    { line: 540, ratio_array: [3, 3, 13, 12, 40, 11, 9, 8, 1] },
-    { line: 560, ratio_array: [3, 3, 13, 12, 11, 40, 9, 8, 1] },
-    { line: 580, ratio_array: [3, 3, 13, 12, 11, 9, 40, 8, 1] },
-    { line: 600, ratio_array: [3, 3, 13, 12, 11, 9, 8, 40, 1] },
+    { line: 500, ratio_array: [3, 3, 24, 13, 12, 11, 9, 8, 17] },
+    { line: 520, ratio_array: [3, 3, 13, 23, 12, 11, 9, 8, 18] },
+    { line: 540, ratio_array: [3, 3, 13, 12, 23, 11, 9, 8, 18] },
+    { line: 560, ratio_array: [3, 3, 13, 12, 11, 22, 9, 8, 19] },
+    { line: 580, ratio_array: [3, 3, 13, 12, 11, 9, 22, 8, 19] },
+    { line: 600, ratio_array: [3, 3, 13, 12, 11, 9, 8, 21, 20] },
 
-    { line: 620, ratio_array: [3, 3, 30, 15, 14, 13, 11, 10, 1] },
-    { line: 640, ratio_array: [3, 3, 15, 30, 14, 13, 11, 10, 1] },
-    { line: 680, ratio_array: [3, 3, 15, 14, 30, 13, 11, 10, 1] },
-    { line: 700, ratio_array: [3, 3, 15, 14, 13, 30, 11, 10, 1] },
-    { line: 720, ratio_array: [3, 3, 15, 14, 13, 11, 30, 10, 1] },
-    { line: 740, ratio_array: [3, 3, 15, 14, 13, 11, 10, 30, 1] },
+    { line: 620, ratio_array: [3, 3, 11, 15, 14, 13, 11, 10, 20] },
+    { line: 640, ratio_array: [3, 3, 15, 29, 14, 13, 11, 10, 2] },
+    { line: 680, ratio_array: [3, 3, 15, 14, 27, 13, 11, 10, 4] },
+    { line: 700, ratio_array: [3, 3, 15, 14, 13, 25, 11, 10, 6] },
+    { line: 720, ratio_array: [3, 3, 15, 14, 13, 11, 23, 10, 8] },
+    { line: 740, ratio_array: [3, 3, 15, 14, 13, 11, 10, 21, 10] },
 
-    { line: 760, ratio_array: [3, 3, 20, 17, 16, 15, 14, 11, 1] },
-    { line: 780, ratio_array: [3, 3, 17, 20, 16, 15, 14, 11, 1] },
-    { line: 800, ratio_array: [3, 3, 17, 16, 20, 15, 14, 11, 1] },
-    { line: 820, ratio_array: [3, 3, 17, 16, 15, 20, 14, 11, 1] },
-    { line: 840, ratio_array: [3, 3, 17, 16, 15, 14, 20, 11, 1] },
-    { line: 860, ratio_array: [3, 3, 17, 16, 15, 14, 11, 20, 1] },
+    { line: 760, ratio_array: [3, 3, 18, 15, 14, 13, 13, 11, 10] },
+    { line: 780, ratio_array: [3, 3, 15, 18, 14, 13, 12, 10, 12] },
+    { line: 800, ratio_array: [3, 3, 15, 14, 18, 13, 12, 10, 12] },
+    { line: 820, ratio_array: [3, 3, 15, 14, 12, 18, 11, 10, 14] },
+    { line: 840, ratio_array: [3, 3, 15, 14, 12, 11, 18, 10, 14] },
+    { line: 860, ratio_array: [3, 3, 15, 13, 12, 11, 10, 17, 16] },
 
-    { line: 1000, ratio_array: [3, 3, 15, 15, 15, 16, 16, 16, 1] },
+    { line: 1000, ratio_array: [3, 3, 12, 12, 12, 13, 14, 15, 16] },
 
-    { line: 1050, ratio_array: [3, 3, 67, 8, 7, 5, 3, 2, 2] },
-    { line: 1100, ratio_array: [3, 3, 8, 67, 7, 5, 3, 2, 2] },
-    { line: 1150, ratio_array: [3, 3, 8, 7, 67, 5, 3, 2, 2] },
-    { line: 1200, ratio_array: [3, 3, 8, 7, 5, 67, 3, 2, 2] },
-    { line: 1250, ratio_array: [3, 3, 8, 7, 5, 3, 67, 2, 2] },
-    { line: 1300, ratio_array: [3, 3, 8, 7, 5, 3, 2, 67, 2] },
+    { line: 1050, ratio_array: [3, 3, 59, 8, 7, 5, 3, 2, 10] },
+    { line: 1100, ratio_array: [3, 3, 8, 59, 7, 5, 3, 2, 10] },
+    { line: 1150, ratio_array: [3, 3, 8, 7, 57, 5, 3, 2, 12] },
+    { line: 1200, ratio_array: [3, 3, 8, 7, 5, 57, 3, 2, 12] },
+    { line: 1250, ratio_array: [3, 3, 8, 7, 5, 3, 55, 2, 14] },
+    { line: 1300, ratio_array: [3, 3, 8, 7, 5, 3, 2, 55, 14] },
 
-    { line: 1350, ratio_array: [3, 3, 68, 7, 6, 5, 4, 2, 2] },
-    { line: 1400, ratio_array: [3, 3, 7, 68, 6, 5, 4, 2, 2] },
-    { line: 1450, ratio_array: [3, 3, 7, 6, 68, 5, 4, 2, 2] },
-    { line: 1500, ratio_array: [3, 3, 7, 6, 5, 68, 4, 2, 2] },
-    { line: 1550, ratio_array: [3, 3, 7, 6, 5, 4, 68, 2, 2] },
-    { line: 1600, ratio_array: [3, 3, 7, 6, 5, 4, 2, 68, 2] },
+    { line: 1350, ratio_array: [3, 3, 54, 7, 6, 5, 4, 2, 16] },
+    { line: 1400, ratio_array: [3, 3, 7, 54, 6, 5, 4, 2, 16] },
+    { line: 1450, ratio_array: [3, 3, 7, 6, 52, 5, 4, 2, 18] },
+    { line: 1500, ratio_array: [3, 3, 7, 6, 5, 52, 4, 2, 18] },
+    { line: 1550, ratio_array: [3, 3, 7, 6, 5, 4, 50, 2, 20] },
+    { line: 1600, ratio_array: [3, 3, 7, 6, 5, 4, 2, 50, 20] },
 
-    { line: 1650, ratio_array: [3, 3, 58, 10, 8, 7, 6, 3, 2] },
-    { line: 1700, ratio_array: [3, 3, 10, 58, 8, 7, 6, 3, 2] },
-    { line: 1750, ratio_array: [3, 3, 10, 8, 58, 7, 6, 3, 2] },
-    { line: 1800, ratio_array: [3, 3, 10, 8, 7, 58, 6, 3, 2] },
-    { line: 1850, ratio_array: [3, 3, 10, 8, 7, 6, 58, 3, 2] },
-    { line: 1900, ratio_array: [3, 3, 10, 8, 7, 6, 3, 58, 2] },
+    { line: 1650, ratio_array: [3, 3, 50, 9, 8, 7, 6, 4, 10] },
+    { line: 1700, ratio_array: [3, 3, 9, 48, 8, 7, 6, 4, 12] },
+    { line: 1750, ratio_array: [3, 3, 9, 8, 46, 7, 6, 4, 14] },
+    { line: 1800, ratio_array: [3, 3, 9, 8, 7, 44, 6, 4, 16] },
+    { line: 1850, ratio_array: [3, 3, 9, 8, 7, 6, 42, 4, 18] },
+    { line: 1900, ratio_array: [3, 3, 9, 8, 7, 6, 4, 40, 20] },
 
-    { line: 1950, ratio_array: [3, 3, 49, 11, 10, 9, 7, 6, 2] },
-    { line: 2000, ratio_array: [3, 3, 11, 49, 10, 9, 7, 6, 2] },
-    { line: 2100, ratio_array: [3, 3, 11, 10, 49, 9, 7, 6, 2] },
-    { line: 2200, ratio_array: [3, 3, 11, 10, 9, 49, 7, 6, 2] },
-    { line: 2300, ratio_array: [3, 3, 11, 10, 9, 7, 49, 6, 2] },
-    { line: 2400, ratio_array: [3, 3, 11, 10, 9, 7, 6, 49, 2] },
+    { line: 1950, ratio_array: [3, 3, 36, 11, 10, 9, 7, 6, 15] },
+    { line: 2000, ratio_array: [2, 3, 11, 35, 10, 9, 8, 6, 16] },
+    { line: 2100, ratio_array: [2, 3, 11, 10, 34, 9, 8, 6, 17] },
+    { line: 2200, ratio_array: [2, 3, 11, 10, 9, 33, 8, 6, 18] },
+    { line: 2300, ratio_array: [2, 3, 11, 10, 9, 8, 32, 6, 19] },
+    { line: 2400, ratio_array: [2, 3, 11, 10, 9, 8, 6, 31, 20] },
 
-    { line: 2500, ratio_array: [3, 3, 39, 13, 12, 11, 9, 8, 2] },
-    { line: 2600, ratio_array: [3, 3, 13, 39, 12, 11, 9, 8, 2] },
-    { line: 2700, ratio_array: [3, 3, 12, 12, 39, 11, 9, 8, 3] },
-    { line: 2800, ratio_array: [3, 3, 12, 12, 11, 39, 9, 8, 3] },
-    { line: 2900, ratio_array: [3, 3, 12, 12, 11, 9, 39, 8, 3] },
-    { line: 3000, ratio_array: [3, 3, 12, 12, 11, 9, 8, 39, 3] },
+    { line: 2500, ratio_array: [2, 3, 26, 13, 12, 11, 10, 8, 15] },
+    { line: 2600, ratio_array: [2, 3, 13, 25, 12, 11, 10, 8, 16] },
+    { line: 2700, ratio_array: [2, 3, 12, 12, 25, 11, 10, 8, 17] },
+    { line: 2800, ratio_array: [2, 3, 12, 12, 11, 24, 10, 8, 18] },
+    { line: 2900, ratio_array: [2, 3, 12, 12, 11, 10, 23, 8, 19] },
+    { line: 3000, ratio_array: [2, 3, 13, 12, 11, 9, 8, 22, 20] },
 
-    { line: 3100, ratio_array: [3, 3, 29, 14, 14, 13, 11, 10, 3] },
-    { line: 3200, ratio_array: [3, 3, 14, 28, 14, 13, 11, 10, 4] },
-    { line: 3300, ratio_array: [3, 3, 14, 14, 28, 13, 11, 10, 4] },
-    { line: 3400, ratio_array: [3, 3, 14, 14, 13, 28, 11, 10, 4] },
-    { line: 3500, ratio_array: [3, 3, 14, 14, 13, 11, 28, 10, 4] },
-    { line: 3600, ratio_array: [3, 3, 14, 14, 13, 11, 10, 28, 4] },
+    { line: 3100, ratio_array: [2, 3, 22, 14, 13, 12, 10, 9, 15] },
+    { line: 3200, ratio_array: [2, 3, 14, 22, 13, 12, 10, 8, 16] },
+    { line: 3300, ratio_array: [2, 3, 14, 13, 22, 12, 9, 8, 17] },
+    { line: 3400, ratio_array: [2, 3, 14, 13, 11, 22, 9, 8, 18] },
+    { line: 3500, ratio_array: [2, 3, 14, 12, 11, 9, 22, 8, 19] },
+    { line: 3600, ratio_array: [2, 3, 14, 12, 10, 9, 8, 22, 20] },
 
-    { line: 3700, ratio_array: [3, 3, 18, 15, 16, 15, 14, 11, 5] },
-    { line: 3800, ratio_array: [3, 3, 15, 18, 16, 15, 14, 11, 5] },
-    { line: 3900, ratio_array: [3, 3, 15, 16, 18, 15, 14, 11, 5] },
-    { line: 4000, ratio_array: [3, 3, 15, 16, 15, 18, 14, 11, 5] },
-    { line: 4250, ratio_array: [3, 3, 15, 16, 15, 14, 18, 11, 5] },
+    { line: 3700, ratio_array: [2, 3, 21, 14, 13, 11, 11, 9, 16] },
+    { line: 3800, ratio_array: [2, 3, 14, 21, 13, 11, 10, 9, 17] },
+    { line: 3900, ratio_array: [2, 3, 14, 13, 21, 11, 10, 8, 18] },
+    { line: 4000, ratio_array: [2, 3, 13, 12, 11, 21, 10, 9, 19] },
+    { line: 4250, ratio_array: [2, 3, 13, 12, 11, 10, 21, 8, 20] },
 
-    { line: 4500, ratio_array: [3, 3, 14, 14, 14, 14, 16, 16, 6] },
-    { line: 4750, ratio_array: [3, 3, 14, 14, 14, 14, 15, 16, 7] },
-    { line: 5000, ratio_array: [3, 3, 14, 14, 14, 14, 15, 15, 8] },
-    { line: 2147483647, ratio_array: [3, 3, 14, 14, 14, 14, 14, 15, 9] },
+    { line: 4500, ratio_array: [2, 3, 9, 11, 12, 20, 14, 15, 14] },
+    { line: 4750, ratio_array: [2, 3, 9, 10, 11, 14, 20, 15, 16] },
+    { line: 5000, ratio_array: [2, 3, 9, 10, 11, 13, 14, 20, 18] },
+
+    { line: 2147483647, ratio_array: [2, 3, 11, 11, 11, 11, 12, 19, 20] },
 ];
 const BG_WIDTH = 10;// BG幅（キャラ数）
 const BG_HEIGHT = 20;// BG高さ（キャラ数）
@@ -610,6 +612,16 @@ tm.define("TitleScene", {
         this.startButton.onpointingstart = function () {
             self.app.replaceScene(GameScene());
         };
+        for (let ii = 0; ii < bgAppearTable.length; ii++) {
+            let total = 0;
+            let tmp = bgAppearTable[ii];
+            for (let jj = 0; jj < tmp.ratio_array.length; jj++) {
+                total += tmp.ratio_array[jj];
+            }
+            if (total != 100) {
+                console.log("line=" + tmp.line + " is not 100(" + total + ")")
+            }
+        }
     },
 
     update: function (app) {
@@ -627,16 +639,6 @@ tm.define("GameScene", {
         this.superInit();
         if (!randomMode) randomSeed = 3557;
 
-        for (let ii = 0; ii < bgAppearTable.length; ii++) {
-            let total = 0;
-            let tmp = bgAppearTable[ii];
-            for (let jj = 0; jj < tmp.ratio_array.length; jj++) {
-                total += tmp.ratio_array[jj];
-            }
-            if (total != 100) {
-                console.log("line=" + tmp.line + " is not 100")
-            }
-        }
         group0 = tm.display.CanvasElement().addChildTo(this);   // BG
         group1 = tm.display.CanvasElement().addChildTo(this);   // プレイヤー、敵
         group2 = tm.display.CanvasElement().addChildTo(this);   // status, cmd, message
@@ -811,6 +813,7 @@ tm.define("GameScene", {
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.UDON) {
                 // パワーアップ
                 player.powerUpTimer += POWER_UP_TIME;
+                if (player.powerUpTimer > MAX_POWER_UP_TIME) player.powerUpTimer = MAX_POWER_UP_TIME;
                 coinSE.play();
             }
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.CUCUMBER) {
@@ -821,7 +824,7 @@ tm.define("GameScene", {
                 player.score += getBgDataArray(xx, yy).kind.point;
                 if (player.powerUpTimer > 0) {
                     if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.ROCK) {
-                        player.powerUpTimer -= parseInt(player.powerUpTimer / 2);
+                        player.powerUpTimer = parseInt(player.powerUpTimer / 2);
                     }
                     player.score += getBgDataArray(xx, yy).kind.point;
                 }
@@ -866,6 +869,7 @@ tm.define("GameScene", {
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.UDON) {
                 // パワーアップ
                 player.powerUpTimer += POWER_UP_TIME;
+                if (player.powerUpTimer > MAX_POWER_UP_TIME) player.powerUpTimer = MAX_POWER_UP_TIME;
                 coinSE.play();
             }
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.CUCUMBER) {
@@ -876,7 +880,7 @@ tm.define("GameScene", {
                 player.score += getBgDataArray(xx, yy).kind.point;
                 if (player.powerUpTimer > 0) {
                     if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.ROCK) {
-                        player.powerUpTimer -= parseInt(player.powerUpTimer / 2);
+                        player.powerUpTimer = parseInt(player.powerUpTimer / 2);
                     }
                     player.score += getBgDataArray(xx, yy).kind.point;
                 }
@@ -984,10 +988,12 @@ tm.define("GameScene", {
             } else {
                 enemy.yPos += 12;
             }
+
             if (enemy.yPos < -SCREEN_HEIGHT - 150) {
                 enemy.yPos = -SCREEN_HEIGHT - 150;
             }
         }
+        //        this.nowDepthLabel.text = player.depth + "m\nPUT=" + player.powerUpTimer;
         this.nowDepthLabel.text = player.depth + "m";
         this.nowScoreLabel.text = player.score;
 
