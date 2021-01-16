@@ -6,6 +6,8 @@ const SCREEN_CENTER_X = SCREEN_WIDTH / 2;   // スクリーン幅の半分
 const SCREEN_CENTER_Y = SCREEN_HEIGHT / 2;  // スクリーン高さの半分
 
 const FPS = 60; // 60フレ
+const POWER_UP_TIME = 3 * FPS;    // パワーアップ時間
+const MAX_POWER_UP_TIME = 15 * FPS;    // 最長パワーアップ時間
 
 const FONT_FAMILY = "'misaki_gothic','Meiryo',sans-serif";
 const ASSETS = {
@@ -42,8 +44,6 @@ const explosion6SE = new Howl({
     src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_6.mp3'
 });
 
-const POWER_UP_TIME = 3 * FPS;    // パワーアップ時間
-const MAX_POWER_UP_TIME = 10 * FPS;    // 最長パワーアップ時間
 // 定義
 const PL_STATUS = defineEnum({
     INIT: {
@@ -238,27 +238,27 @@ const bgAppearTable = [
     { line: 180, ratio_array: [3, 2, 7, 6, 62, 5, 4, 2, 9] },
     { line: 200, ratio_array: [3, 2, 7, 6, 5, 61, 4, 2, 10] },
     { line: 220, ratio_array: [3, 2, 7, 6, 5, 4, 61, 2, 10] },
-    { line: 240, ratio_array: [3, 2, 7, 6, 5, 4, 2, 60, 11] },
+    { line: 240, ratio_array: [3, 2, 8, 6, 5, 4, 2, 60, 10] },
 
-    { line: 260, ratio_array: [3, 2, 50, 10, 8, 7, 5, 4, 11] },
-    { line: 280, ratio_array: [3, 2, 10, 49, 8, 7, 5, 4, 12] },
-    { line: 300, ratio_array: [3, 2, 10, 8, 49, 7, 5, 4, 12] },
-    { line: 320, ratio_array: [3, 2, 10, 8, 7, 48, 5, 4, 13] },
-    { line: 340, ratio_array: [3, 2, 10, 8, 7, 5, 48, 4, 13] },
-    { line: 360, ratio_array: [3, 2, 10, 8, 7, 5, 4, 47, 14] },
+    { line: 260, ratio_array: [3, 2, 50, 10, 9, 7, 5, 4, 10] },
+    { line: 280, ratio_array: [3, 2, 10, 49, 9, 7, 5, 4, 11] },
+    { line: 300, ratio_array: [3, 2, 10, 9, 49, 7, 5, 4, 11] },
+    { line: 320, ratio_array: [3, 2, 10, 9, 7, 48, 6, 4, 11] },
+    { line: 340, ratio_array: [3, 2, 10, 9, 7, 6, 48, 4, 11] },
+    { line: 360, ratio_array: [3, 2, 10, 9, 7, 6, 4, 47, 12] },
 
-    { line: 380, ratio_array: [3, 3, 37, 11, 10, 9, 7, 6, 14] },
-    { line: 400, ratio_array: [3, 3, 11, 36, 10, 9, 7, 6, 15] },
-    { line: 420, ratio_array: [3, 3, 11, 10, 36, 9, 7, 6, 15] },
-    { line: 440, ratio_array: [3, 3, 11, 10, 9, 35, 7, 6, 16] },
-    { line: 460, ratio_array: [3, 3, 11, 10, 9, 7, 35, 6, 16] },
-    { line: 480, ratio_array: [3, 3, 11, 10, 9, 7, 6, 34, 17] },
+    { line: 380, ratio_array: [3, 3, 37, 12, 11, 9, 7, 6, 12] },
+    { line: 400, ratio_array: [3, 3, 12, 36, 11, 10, 7, 6, 12] },
+    { line: 420, ratio_array: [3, 3, 12, 11, 36, 10, 7, 6, 12] },
+    { line: 440, ratio_array: [3, 3, 12, 11, 10, 35, 7, 6, 13] },
+    { line: 460, ratio_array: [3, 3, 12, 11, 10, 7, 35, 6, 13] },
+    { line: 480, ratio_array: [3, 3, 12, 11, 10, 8, 6, 34, 13] },
 
-    { line: 500, ratio_array: [3, 3, 24, 13, 12, 11, 9, 8, 17] },
-    { line: 520, ratio_array: [3, 3, 13, 23, 12, 11, 9, 8, 18] },
-    { line: 540, ratio_array: [3, 3, 13, 12, 23, 11, 9, 8, 18] },
-    { line: 560, ratio_array: [3, 3, 14, 13, 11, 22, 9, 8, 17] },
-    { line: 580, ratio_array: [3, 3, 14, 13, 11, 9, 22, 8, 17] },
+    { line: 500, ratio_array: [3, 3, 24, 14, 13, 12, 10, 8, 13] },
+    { line: 520, ratio_array: [3, 3, 14, 23, 13, 12, 10, 8, 14] },
+    { line: 540, ratio_array: [3, 3, 14, 13, 23, 12, 10, 8, 14] },
+    { line: 560, ratio_array: [3, 3, 15, 14, 12, 22, 9, 8, 14] },
+    { line: 580, ratio_array: [3, 3, 15, 14, 12, 9, 22, 8, 14] },
     { line: 600, ratio_array: [3, 3, 17, 16, 14, 13, 12, 21, 1] },
 
     { line: 620, ratio_array: [3, 3, 30, 15, 14, 13, 11, 10, 1] },
@@ -331,6 +331,7 @@ const bgAppearTable = [
 
     { line: 2147483647, ratio_array: [2, 3, 11, 11, 11, 11, 12, 19, 20] },
 ];
+
 const BG_WIDTH = 10;// BG幅（キャラ数）
 const BG_HEIGHT = 20;// BG高さ（キャラ数）
 let bgData = [
@@ -982,8 +983,47 @@ tm.define("GameScene", {
                 ySpd = 6;
                 yLmt = 100;
             } else if (player.depth <= 300) {
+                ySpd = 6;
+                yLmt = 150;
+            } else if (player.depth <= 350) {
+                ySpd = 6;
+                yLmt = 200;
+            } else if (player.depth <= 400) {
+                ySpd = 6;
+                yLmt = 250;
+            } else if (player.depth <= 450) {
+                ySpd = 6;
+                yLmt = 300;
+            } else if (player.depth <= 500) {
+                ySpd = 6;
+                yLmt = 350;
+            } else if (player.depth <= 550) {
+                ySpd = 6;
+                yLmt = 400;
+            } else if (player.depth <= 600) {
+                ySpd = 6;
+                yLmt = 450;
+            } else if (player.depth <= 650) {
                 ySpd = 7;
                 yLmt = 500;
+            } else if (player.depth <= 700) {
+                ySpd = 7;
+                yLmt = 550;
+            } else if (player.depth <= 750) {
+                ySpd = 7;
+                yLmt = 600;
+            } else if (player.depth <= 800) {
+                ySpd = 7;
+                yLmt = 650;
+            } else if (player.depth <= 850) {
+                ySpd = 7;
+                yLmt = 700;
+            } else if (player.depth <= 900) {
+                ySpd = 7;
+                yLmt = 750;
+            } else if (player.depth <= 950) {
+                ySpd = 7;
+                yLmt = 800;
             } else if (player.depth <= 1000) {
                 ySpd = 8;
                 yLmt = 1000;
