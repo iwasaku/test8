@@ -551,7 +551,7 @@ tm.define("LogoScene", {
                 {
                     type: "Label", name: "logoLabel",
                     x: SCREEN_CENTER_X,
-                    y: 320,
+                    y: SCREEN_CENTER_Y,
                     fillStyle: "#888",
                     fontSize: 64,
                     fontFamily: FONT_FAMILY,
@@ -565,7 +565,7 @@ tm.define("LogoScene", {
 
     update: function (app) {
         // 時間が来たらタイトルへ
-        //        if(++this.localTimer >= 5*app.fps)
+        //if (++this.localTimer >= 5 * app.fps)
         this.app.replaceScene(TitleScene());
     }
 });
