@@ -1,4 +1,6 @@
-//console.log = function () { };  // ログを出す時にはコメントアウトする
+phina.globalize();
+
+console.log = function () { };  // ログを出す時にはコメントアウトする
 
 const SCREEN_WIDTH = 1280 - 128;             // スクリーン幅
 const SCREEN_HEIGHT = 2436;                 // スクリーン高さ
@@ -9,40 +11,92 @@ const FPS = 60; // 60フレ
 const POWER_UP_TIME = 3 * FPS;    // パワーアップ時間
 const MAX_POWER_UP_TIME = 15 * FPS;    // 最長パワーアップ時間
 
-const FONT_FAMILY = "'misaki_gothic','Meiryo',sans-serif";
+const FONT_FAMILY = "'Press Start 2P','Meiryo',sans-serif";
 const ASSETS = {
-    "nmls": "./resource/new_nmls_128.png",
-    "boss": "./resource/boss.png",
+    image: {
+        "nmls": "./resource/new_nmls_128.png",
+        "boss": "./resource/boss.png",
 
-    "map_chip": "./resource/map_chip.png?3",  // 背景チップ
+        "map_chip": "./resource/map_chip.png",  // 背景チップ
+    },
+    spritesheet: {
+        "player_ss":
+        {
+            // フレーム情報
+            "frame": {
+                "width": 128, // 1フレームの画像サイズ（横）
+                "height": 128, // 1フレームの画像サイズ（縦）
+                "cols": 6, // フレーム数（横）
+                "rows": 1, // フレーム数（縦）
+            },
+            // アニメーション情報
+            "animations": {
+                "nmls": {
+                    "frames": [0],
+                    "next": "nmls",
+                    "frequency": 1,
+                },
+                "left0": {
+                    "frames": [1],
+                    "next": "left0",
+                    "frequency": 1,
+                },
+                "left1": {
+                    "frames": [2],
+                    "next": "left1",
+                    "frequency": 1,
+                },
+                "right0": {
+                    "frames": [3],
+                    "next": "right0",
+                    "frequency": 1,
+                },
+                "right1": {
+                    "frames": [4],
+                    "next": "right1",
+                    "frequency": 1,
+                },
+            }
+        },
+        "map_chip_ss":
+        {
+            // フレーム情報
+            "frame": {
+                "width": 128, // 1フレームの画像サイズ（横）
+                "height": 132, // 1フレームの画像サイズ（縦）
+                "cols": 11, // フレーム数（横）
+                "rows": 1, // フレーム数（縦）
+            },
+            // アニメーション情報
+            "animations": {
+                "0": { "frames": [0], "next": "0", "frequency": 30, },
+                "1": { "frames": [1], "next": "1", "frequency": 30, },
+                "2": { "frames": [2], "next": "2", "frequency": 30, },
+                "3": { "frames": [3], "next": "3", "frequency": 30, },
+                "4": { "frames": [4], "next": "4", "frequency": 30, },
+                "5": { "frames": [5], "next": "5", "frequency": 30, },
+                "6": { "frames": [6], "next": "6", "frequency": 30, },
+                "7": { "frames": [7], "next": "7", "frequency": 30, },
+                "8": { "frames": [8], "next": "8", "frequency": 30, },
+                "9": { "frames": [9], "next": "9", "frequency": 30, },
+                "10": { "frames": [10], "next": "10", "frequency": 30, },
+            }
+        }
+
+    },
+    sound: {
+        "fall_se": 'https://iwasaku.github.io/test7/NEMLESSSTER/resource/fall.mp3',
+        "coin_se": 'https://iwasaku.github.io/test7/NEMLESSSTER/resource/coin05.mp3',
+        "explosion0_se": 'https://iwasaku.github.io/test8/COKS/resource/explosion_0.mp3',
+        "explosion1_se": 'https://iwasaku.github.io/test8/COKS/resource/explosion_1.mp3',
+        "explosion2_se": 'https://iwasaku.github.io/test8/COKS/resource/explosion_2.mp3',
+        "explosion3_se": 'https://iwasaku.github.io/test8/COKS/resource/explosion_3.mp3',
+        "explosion4_se": 'https://iwasaku.github.io/test8/COKS/resource/explosion_4.mp3',
+        "explosion5_se": 'https://iwasaku.github.io/test8/COKS/resource/explosion_5.mp3',
+        "explosion6_se": 'https://iwasaku.github.io/test8/COKS/resource/explosion_6.mp3',
+    }
+
 };
-const fallSE = new Howl({
-    src: 'https://iwasaku.github.io/test7/NEMLESSSTER/resource/fall.mp3?20200708'
-});
-const coinSE = new Howl({
-    src: 'https://iwasaku.github.io/test7/NEMLESSSTER/resource/coin05.mp3'
-});
-const explosion0SE = new Howl({
-    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_0.mp3'
-});
-const explosion1SE = new Howl({
-    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_1.mp3'
-});
-const explosion2SE = new Howl({
-    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_2.mp3'
-});
-const explosion3SE = new Howl({
-    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_3.mp3'
-});
-const explosion4SE = new Howl({
-    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_4.mp3'
-});
-const explosion5SE = new Howl({
-    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_5.mp3'
-});
-const explosion6SE = new Howl({
-    src: 'https://iwasaku.github.io/test8/COKS/resource/explosion_6.mp3'
-});
 
 // 定義
 const PL_STATUS = defineEnum({
@@ -125,7 +179,7 @@ const MAP_CHIP_DEF = defineEnum({
         hp: 0,
         se: null,
         point: 0,
-        string: 'cucunmber'
+        string: 'cucumber'
     },
 
     STRATA_0: {
@@ -135,7 +189,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: false,
         hp: 1,
         point: 1,
-        se: explosion0SE,
+        se: "explosion0_se",
         string: 'strata_0'
     },
 
@@ -146,7 +200,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: false,
         hp: 2,
         point: 2,
-        se: explosion1SE,
+        se: "explosion1_se",
         string: 'strata_1'
     },
 
@@ -157,7 +211,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: false,
         hp: 3,
         point: 4,
-        se: explosion2SE,
+        se: "explosion2_se",
         string: 'strata_2'
     },
 
@@ -168,7 +222,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: false,
         hp: 4,
         point: 8,
-        se: explosion3SE,
+        se: "explosion3_se",
         string: 'strata_3'
     },
 
@@ -179,7 +233,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: false,
         hp: 5,
         point: 16,
-        se: explosion4SE,
+        se: "explosion4_se",
         string: 'strata_4'
     },
 
@@ -190,7 +244,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: false,
         hp: 6,
         point: 32,
-        se: explosion5SE,
+        se: "explosion5_se",
         string: 'strata_5'
     },
 
@@ -201,7 +255,7 @@ const MAP_CHIP_DEF = defineEnum({
         is_item: false,
         hp: 10,
         point: 256,
-        se: explosion6SE,
+        se: "explosion6_se",
         string: 'rock'
     },
 });
@@ -512,107 +566,144 @@ class TurnControl {
 }
 let trunControl = null;
 
-tm.main(function () {
-    // アプリケーションクラスを生成
-    var app = tm.display.CanvasApp("#world");
-    app.resize(SCREEN_WIDTH, SCREEN_HEIGHT);    // サイズ(解像度)設定
-    app.fitWindow();                            // 自動フィッティング有効
-    app.background = "rgba(77, 136, 255, 1.0)"; // 背景色
-    app.fps = FPS;                              // フレーム数
-
-    var loading = tm.ui.LoadingScene({
-        assets: ASSETS,
+phina.main(function () {
+    var app = GameApp({
+        startLabel: 'logo',
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
+        assets: ASSETS,
+        fps: FPS,
+        backgroundColor: 'black',
+
+        // シーンのリストを引数で渡す
+        scenes: [
+            {
+                className: 'LogoScene',
+                label: 'logo',
+                nextLabel: 'title',
+            },
+            {
+                className: 'TitleScene',
+                label: 'title',
+                nextLabel: 'game',
+            },
+            {
+                className: 'GameScene',
+                label: 'game',
+                nextLabel: 'game',
+            },
+        ]
     });
 
-    // 読み込み完了後に呼ばれるメソッドを登録
-    loading.onload = function () {
-        app.replaceScene(LogoScene());
-    };
+    // iOSなどでユーザー操作がないと音がならない仕様対策
+    // 起動後初めて画面をタッチした時に『無音』を鳴らす
+    app.domElement.addEventListener('touchend', function dummy() {
+        var s = phina.asset.Sound();
+        s.loadFromBuffer();
+        s.play().stop();
+        app.domElement.removeEventListener('touchend', dummy);
+    });
 
-    // ローディングシーンに入れ替える
-    app.replaceScene(loading);
+    // fps表示
+    //app.enableStats();
 
     // 実行
     app.run();
 });
 
 /*
+* ローディング画面をオーバーライド
+*/
+phina.define('LoadingScene', {
+    superClass: 'DisplayScene',
+
+    init: function (options) {
+        this.superInit(options);
+        // 背景色
+        var self = this;
+        var loader = phina.asset.AssetLoader();
+
+        // 明滅するラベル
+        let label = phina.display.Label({
+            text: "",
+            fontSize: 64,
+            fill: 'white',
+        }).addChildTo(this).setPosition(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+
+        // ロードが進行したときの処理
+        loader.onprogress = function (e) {
+            // 進捗具合を％で表示する
+            label.text = "{0}%".format((e.progress * 100).toFixed(0));
+        };
+
+        // ローダーによるロード完了ハンドラ
+        loader.onload = function () {
+            // Appコアにロード完了を伝える（==次のSceneへ移行）
+            self.flare('loaded');
+        };
+
+        // ロード開始
+        loader.load(options.assets);
+    },
+});
+
+/*
  * ロゴ
  */
-tm.define("LogoScene", {
-    superClass: "tm.app.Scene",
+phina.define("LogoScene", {
+    superClass: 'DisplayScene',
 
-    init: function () {
-        this.superInit();
-        this.fromJSON({
-            children: [
-                {
-                    type: "Label", name: "logoLabel",
-                    x: SCREEN_CENTER_X,
-                    y: SCREEN_CENTER_Y,
-                    fillStyle: "#888",
-                    fontSize: 64,
-                    fontFamily: FONT_FAMILY,
-                    text: "UNOFFICIAL GAME",
-                    align: "center",
-                },
-            ]
-        });
+    init: function (option) {
+        this.superInit(option);
+
         this.localTimer = 0;
     },
 
     update: function (app) {
-        // 時間が来たらタイトルへ
-        //if (++this.localTimer >= 5 * app.fps)
-        this.app.replaceScene(TitleScene());
+        // フォント読み込み待ち
+        var self = this;
+        document.fonts.load('12px "Press Start 2P"').then(function () {
+            self.exit();
+        });
     }
 });
 
 /*
  * タイトル
  */
-tm.define("TitleScene", {
-    superClass: "tm.app.Scene",
+phina.define("TitleScene", {
+    superClass: 'DisplayScene',
 
-    init: function () {
-        this.superInit();
-        this.fromJSON({
-            children: [
-                {
-                    type: "Label", name: "titleLabel",
-                    x: SCREEN_CENTER_X,
-                    y: SCREEN_CENTER_Y,
-                    fillStyle: "#fff",
-                    fontSize: 160,
-                    fontFamily: FONT_FAMILY,
-                    text: "C.O.K.S.",
-                    align: "center",
-                },
-                {
-                    type: "FlatButton", name: "startButton",
-                    init: [
-                        {
-                            text: "START",
-                            fontFamily: FONT_FAMILY,
-                            fontSize: 96,
-                            width: 512,
-                            height: 160,
-                            bgColor: "hsl(240, 0%, 70%)",
-                        }
-                    ],
-                    x: SCREEN_CENTER_X,
-                    y: SCREEN_CENTER_Y + 320,
-                },
-            ]
-        });
+    init: function (option) {
+        this.superInit(option);
+
+        this.titleLabel = Label({
+            text: "C.O.K.S.",
+            fontSize: 120,
+            fontFamily: FONT_FAMILY,
+            align: "center",
+            fill: "#fff",
+            x: SCREEN_CENTER_X,
+            y: SCREEN_CENTER_Y,
+        }).addChildTo(this);
+
+        this.startButton = Button({
+            text: "START",
+            fontSize: 96,
+            fontFamily: FONT_FAMILY,
+            fill: "#444",
+            x: SCREEN_CENTER_X,
+            y: SCREEN_CENTER_Y + 320,
+            width: 512,
+            height: 160,
+            cornerRadius: 8,
+        }).addChildTo(this);
         this.localTimer = 0;
-
         var self = this;
-        this.startButton.onpointingstart = function () {
-            self.app.replaceScene(GameScene());
+        this.startButton.onpointstart = function () {
+            self.exit();
         };
+
         for (let ii = 0; ii < bgAppearTable.length; ii++) {
             let total = 0;
             let tmp = bgAppearTable[ii];
@@ -626,23 +717,23 @@ tm.define("TitleScene", {
     },
 
     update: function (app) {
-        app.background = "rgba(0, 0, 0, 1.0)"; // 背景色
     }
 });
 
 /*
  * ゲーム
  */
-tm.define("GameScene", {
-    superClass: "tm.app.Scene",
+phina.define("GameScene", {
+    superClass: 'DisplayScene',
 
-    init: function () {
-        this.superInit();
+    init: function (option) {
+        this.superInit(option);
+
         if (!randomMode) randomSeed = 3557;
 
-        group0 = tm.display.CanvasElement().addChildTo(this);   // BG
-        group1 = tm.display.CanvasElement().addChildTo(this);   // プレイヤー、敵
-        group2 = tm.display.CanvasElement().addChildTo(this);   // status, cmd, message
+        group0 = DisplayElement().addChildTo(this);   // BG
+        group1 = DisplayElement().addChildTo(this);   // プレイヤー、敵
+        group2 = DisplayElement().addChildTo(this);   // status, cmd, message
 
         for (let yy = 0; yy < BG_HEIGHT; yy++) {
             makeBgData(yy);
@@ -651,114 +742,94 @@ tm.define("GameScene", {
         player = new PlayerSprite().addChildTo(group1);
         boss = new Boss().addChildTo(group1);
 
-        this.fromJSON({
-            children: [
-                {
-                    type: "Label", name: "nowDepthLabel",
-                    x: SCREEN_CENTER_X,
-                    y: 64,
-                    fillStyle: "#fff",
-                    shadowColor: "#000",
-                    shadowBlur: 10,
-                    fontSize: 128,
-                    fontFamily: FONT_FAMILY,
-                    text: "0m",
-                    align: "center",
-                },
-                {
-                    type: "Label", name: "nowScoreLabel",
-                    x: SCREEN_CENTER_X,
-                    y: SCREEN_HEIGHT - 64,
-                    fillStyle: "#fff",
-                    shadowColor: "#000",
-                    shadowBlur: 10,
-                    fontSize: 128,
-                    fontFamily: FONT_FAMILY,
-                    text: "0",
-                    align: "center",
-                },
-                {
-                    type: "Label", name: "gameOverLabel",
-                    x: SCREEN_CENTER_X,
-                    y: SCREEN_CENTER_Y - 512,
-                    fillStyle: "#fff",
-                    shadowColor: "#000",
-                    shadowBlur: 50,
-                    fontSize: 192,
-                    fontFamily: FONT_FAMILY,
-                    text: "GAME OVER",
-                    align: "center",
-                },
-                {
-                    type: "FlatButton", name: "tweetButton",
-                    init: [
-                        {
-                            text: "TWEET",
-                            fontFamily: FONT_FAMILY,
-                            fontSize: 96,
-                            width: 400,
-                            bgColor: "hsl(205, 81%, 63%)",
-                        }
-                    ],
-                    x: SCREEN_CENTER_X + 300,
-                    y: SCREEN_CENTER_Y + 128,
-                    alpha: 0.0,
-                },
-                {
-                    type: "FlatButton", name: "restartButton",
-                    init: [
-                        {
-                            text: "RESTART",
-                            fontFamily: FONT_FAMILY,
-                            fontSize: 96,
-                            width: 400,
-                            bgColor: "hsl(240, 0%, 70%)",
-                        }
-                    ],
-                    x: SCREEN_CENTER_X - 300,
-                    y: SCREEN_CENTER_Y + 128,
-                    alpha: 0.0,
-                },
-                {
-                    type: "FlatButton", name: "keyLeft",
-                    init: [
-                        {
-                            text: "左",
-                            fontFamily: FONT_FAMILY,
-                            fontSize: 192,
-                            width: SCREEN_WIDTH / 2,
-                            height: SCREEN_HEIGHT,
-                            bgColor: "hsl(60, 100%, 75%)",
-                        }
-                    ],
-                    x: SCREEN_WIDTH / 4,
-                    y: SCREEN_CENTER_Y,
-                    alpha: 0.0,
-                },
-                {
-                    type: "FlatButton", name: "keyRight",
-                    init: [
-                        {
-                            text: "右",
-                            fontFamily: FONT_FAMILY,
-                            fontSize: 192,
-                            width: SCREEN_WIDTH / 2,
-                            height: SCREEN_HEIGHT,
-                            bgColor: "hsl(60, 100%, 70%)",
-                        }
-                    ],
-                    x: SCREEN_CENTER_X + SCREEN_WIDTH / 4,
-                    y: SCREEN_CENTER_Y,
-                    alpha: 0.0,
-                },
-            ]
-        });
+        this.nowDepthLabel = Label({
+            text: "0m",
+            fontSize: 80,
+            fontFamily: FONT_FAMILY,
+            align: "center",
+            fill: "#fff",
+            shadow: "#000",
+            shadowBlur: 10,
+            x: SCREEN_CENTER_X,
+            y: 64,
+        }).addChildTo(group2);
+        this.nowScoreLabel = Label({
+            text: "0",
+            fontSize: 80,
+            fontFamily: FONT_FAMILY,
+            align: "center",
+            fill: "#fff",
+            shadow: "#000",
+            shadowBlur: 10,
+            x: SCREEN_CENTER_X,
+            y: SCREEN_HEIGHT - 64,
+        }).addChildTo(group2);
+        this.gameOverLabel = Label({
+            text: "GAME OVER",
+            fontSize: 120,
+            fontFamily: FONT_FAMILY,
+            align: "center",
+            fill: "#fff",
+            shadow: "#000",
+            shadowBlur: 50,
+            x: SCREEN_CENTER_X,
+            y: SCREEN_CENTER_Y - 512,
+        }).addChildTo(group2);
+
+        this.tweetButton = Button({
+            text: "POST",
+            fontSize: 52,
+            fontFamily: FONT_FAMILY,
+            align: "center",
+            fill: "#7575EF",
+            x: SCREEN_CENTER_X - 300,
+            y: SCREEN_CENTER_Y + 128,
+            cornerRadius: 8,
+            width: 400,
+            height: 120,
+        }).addChildTo(group2);
+        this.tweetButton.alpha = 0.0;
+        this.restartButton = Button({
+            fontSize: 52,
+            text: "RESTART",
+            fontFamily: FONT_FAMILY,
+            align: "center",
+            fill: "#B2B2B2",
+            x: SCREEN_CENTER_X + 300,
+            y: SCREEN_CENTER_Y + 128,
+            cornerRadius: 8,
+            width: 400,
+            height: 120,
+        }).addChildTo(group2);
+        this.restartButton.alpha = 0.0;
+        this.keyLeft = Button({
+            text: "左",
+            fontFamily: FONT_FAMILY,
+            fontSize: 192,
+            width: SCREEN_WIDTH / 2,
+            height: SCREEN_HEIGHT,
+            fill: "hsl(60, 100%, 75%)",
+            x: SCREEN_WIDTH / 4,
+            y: SCREEN_CENTER_Y,
+        }).addChildTo(group2);
+        this.keyLeft.alpha = 0.0;
+        this.keyRight = Button({
+            text: "右",
+            fontFamily: FONT_FAMILY,
+            fontSize: 192,
+            width: SCREEN_WIDTH / 2,
+            height: SCREEN_HEIGHT,
+            fill: "hsl(60, 100%, 70%)",
+            x: SCREEN_CENTER_X + SCREEN_WIDTH / 4,
+            y: SCREEN_CENTER_Y,
+        }).addChildTo(group2);
+        this.keyRight.alpha = 0.0;
 
         this.tweetButton.sleep();
         this.restartButton.sleep();
 
         var self = this;
-        this.restartButton.onpointingstart = function () {
+        this.restartButton.onpointstart = function () {
             // BGスプライトのremove
             for (let yy = 0; yy < BG_HEIGHT - 1; yy++) {
                 for (let xx = 0; xx < BG_WIDTH; xx++) {
@@ -783,11 +854,11 @@ tm.define("GameScene", {
                 boss.remove();
                 boss = null;
             }
-            self.app.replaceScene(GameScene());
+            self.exit();
         };
 
         this.keyLeft.sleep();
-        this.keyLeft.onpointingstart = function () {
+        this.keyLeft.onpointstart = function () {
             if (!player.status.isAccKey) return;
             if (++player.aminCount > 1) player.aminCount = 0;
             player.aminBase = "left";
@@ -814,13 +885,15 @@ tm.define("GameScene", {
                 // パワーアップ
                 player.powerUpTimer += POWER_UP_TIME;
                 if (player.powerUpTimer > MAX_POWER_UP_TIME) player.powerUpTimer = MAX_POWER_UP_TIME;
-                coinSE.play();
+                SoundManager.play("coin_se");
             }
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.CUCUMBER) {
                 // 死亡
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
-                if (getBgDataArray(xx, yy).kind.se != null) getBgDataArray(xx, yy).kind.se.play();
+                if (getBgDataArray(xx, yy).kind.se != null) {
+                    SoundManager.play(getBgDataArray(xx, yy).kind.se);
+                }
                 player.score += getBgDataArray(xx, yy).kind.point;
                 if (player.powerUpTimer > 0) {
                     if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.ROCK) {
@@ -843,7 +916,7 @@ tm.define("GameScene", {
         };
 
         this.keyRight.sleep();
-        this.keyRight.onpointingstart = function () {
+        this.keyRight.onpointstart = function () {
             if (!player.status.isAccKey) return;
             if (++player.aminCount > 1) player.aminCount = 0;
             player.aminBase = "right";
@@ -870,13 +943,15 @@ tm.define("GameScene", {
                 // パワーアップ
                 player.powerUpTimer += POWER_UP_TIME;
                 if (player.powerUpTimer > MAX_POWER_UP_TIME) player.powerUpTimer = MAX_POWER_UP_TIME;
-                coinSE.play();
+                SoundManager.play("coin_se");
             }
             if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.CUCUMBER) {
                 // 死亡
                 player.status = PL_STATUS.DEAD_INIT;
             } else {
-                if (getBgDataArray(xx, yy).kind.se != null) getBgDataArray(xx, yy).kind.se.play();
+                if (getBgDataArray(xx, yy).kind.se != null) {
+                    SoundManager.play(getBgDataArray(xx, yy).kind.se);
+                }
                 player.score += getBgDataArray(xx, yy).kind.point;
                 if (player.powerUpTimer > 0) {
                     if (getBgDataArray(xx, yy).kind == MAP_CHIP_DEF.ROCK) {
@@ -908,16 +983,16 @@ tm.define("GameScene", {
 
         if ((player.status === PL_STATUS.DEAD_INIT) || (player.status === PL_STATUS.DEAD)) {
             if (player.status === PL_STATUS.DEAD_INIT) {
-                fallSE.play();
+                SoundManager.play("fall_se");
                 player.status = PL_STATUS.DEAD;
             }
 
             var self = this;
             // tweet ボタン
             this.tweetButton.onclick = function () {
-                var twitterURL = tm.social.Twitter.createURL({
+                var twitterURL = phina.social.Twitter.createURL({
                     type: "tweet",
-                    text: "C.O.K.S. 地下" + player.depth + "m に到達（スコア：" + player.score + "）",
+                    text: "C.O.K.S. 地下" + player.depth + "m に到達（スコア：" + player.score + "）\n",
                     hashtags: ["ネムレス", "NEMLESSS"],
                     url: "https://iwasaku.github.io/test8/COKS/",
                 });
@@ -931,15 +1006,15 @@ tm.define("GameScene", {
             if (this.buttonAlpha > 1.0) {
                 this.buttonAlpha = 1.0;
             }
-            this.gameOverLabel.setAlpha(this.buttonAlpha);
-            this.tweetButton.setAlpha(this.buttonAlpha);
-            this.restartButton.setAlpha(this.buttonAlpha);
+            this.gameOverLabel.alpha = this.buttonAlpha;
+            this.tweetButton.alpha = this.buttonAlpha;
+            this.restartButton.alpha = this.buttonAlpha;
             if (this.buttonAlpha > 0.7) {
                 this.tweetButton.wakeUp();
                 this.restartButton.wakeUp();
             }
-            this.keyLeft.setAlpha(0.0);
-            this.keyRight.setAlpha(0.0);
+            this.keyLeft.alpha = 0.0;
+            this.keyRight.alpha = 0.0;
         } else if (player.status === PL_STATUS.SHAKE) {
             if (--player.shakeTimer <= 0) {
                 player.status = PL_STATUS.START;
@@ -947,22 +1022,22 @@ tm.define("GameScene", {
             }
         } else {
             if (!player.status.isStarted) {
-                this.gameOverLabel.setAlpha(0.0);
-                this.keyLeft.setAlpha(0.0);
+                this.gameOverLabel.alpha = 0.0;
+                this.keyLeft.alpha = 0.0;
                 this.keyLeft.wakeUp();
-                this.keyRight.setAlpha(0.0);
+                this.keyRight.alpha = 0.0;
                 this.keyRight.wakeUp();
                 player.status = PL_STATUS.START;
             }
-            this.keyLeft.setAlpha(0.0);
-            this.keyRight.setAlpha(0.0);
+            this.keyLeft.alpha = 0.0;
+            this.keyRight.alpha = 0.0;
 
             if (player.powerUpTimer > 0) {
                 player.powerUpTimer--;
-                player.gotoAndPlay("nmls");
+                player.anim.gotoAndPlay("nmls");
             } else {
                 player.powerUpTimer = 0;
-                player.gotoAndPlay(player.aminBase + player.aminCount);
+                player.anim.gotoAndPlay(player.aminBase + player.aminCount);
             }
 
             var ySpd = 0;
@@ -1056,29 +1131,12 @@ tm.define("GameScene", {
 /*
  * Player
  */
-tm.define("PlayerSprite", {
-    superClass: "tm.app.AnimationSprite",
-    init: function () {
-        let ss = tm.asset.SpriteSheet({
-            // 画像
-            image: "nmls",
-            // １コマのサイズ指定および全コマ数
-            frame: {
-                width: 128,
-                height: 128,
-                count: 6
-            },
-            // アニメーションの定義（開始コマ、終了コマ+1、次のアニメーション,wait）
-            animations: {
-                "nmls": [0, 1, "nmls", 1],
-                "left0": [1, 2, "left0", 1],
-                "left1": [2, 3, "left1", 1],
-                "right0": [3, 4, "right0", 1],
-                "right1": [4, 5, "right1", 1],
-            }
-        });
-
-        this.superInit(ss, 128, 128);
+phina.define("PlayerSprite", {
+    superClass: 'Sprite',
+    init: function (option) {
+        this.superInit("nmls", 128, 128);
+        this.anim = FrameAnimation('player_ss').attachTo(this);
+        this.anim.fit = false;
         this.direct = '';
         this.zRot = 0;
         this.xBgPos = 4;
@@ -1090,7 +1148,7 @@ tm.define("PlayerSprite", {
         this.setPosition(this.xPos, this.yPos).setScale(1, 1);
         this.setInteractive(false);
         this.setBoundingType("rect");
-        this.gotoAndPlay("left0");
+        this.anim.gotoAndPlay("left0");
         this.aminBase = "left";
         this.aminCount = 0;
 
@@ -1116,10 +1174,10 @@ tm.define("PlayerSprite", {
 /*
  * Boss
  */
-tm.define("Boss", {
-    superClass: "tm.app.Sprite",
+phina.define("Boss", {
+    superClass: "Sprite",
 
-    init: function () {
+    init: function (option) {
         this.superInit("boss", 1280, 2406);
         this.direct = '';
         this.zRot = 0;
@@ -1138,36 +1196,13 @@ tm.define("Boss", {
 /*
  * マップ用スプライトの定義
  */
-tm.define("MapChipSprite", {
-    superClass: "tm.app.AnimationSprite",
+phina.define("MapChipSprite", {
+    superClass: 'Sprite',
 
     init: function (xPos, yPos, isEven, kind) {
-        let ss = tm.asset.SpriteSheet({
-            // 画像
-            image: "map_chip",
-            // １コマのサイズ指定および全コマ数
-            frame: {
-                width: 128,
-                height: 132,
-                count: 11
-            },
-            // アニメーションの定義（開始コマ、終了コマ+1、次のアニメーション,wait）
-            animations: {
-                "0": [0, 1, "0", 30],   // BLANK
-                "1": [1, 2, "1", 30],   // BLOCK
-                "2": [2, 3, "2", 30],   // UDON
-                "3": [3, 4, "3", 30],   // CUCUMBER
-                "4": [4, 5, "4", 30],   // STRATA_0
-                "5": [5, 6, "5", 30],   // STRATA_1
-                "6": [6, 7, "6", 30],   // STRATA_2
-                "7": [7, 8, "7", 30],   // STRATA_3
-                "8": [8, 9, "8", 30],   // STRATA_4
-                "9": [9, 10, "9", 30],   // STRATA_5
-                "10": [10, 11, "10", 30],   // ROCK
-            }
-        });
-
-        this.superInit(ss, 128, 132);
+        this.superInit("map_chip", 128, 132);
+        this.anim = FrameAnimation('map_chip_ss').attachTo(this);
+        this.anim.fit = false;
         this.direct = '';
         this.zRot = 0;
         this.xOfs = isEven ? 64 : 0;
@@ -1176,7 +1211,7 @@ tm.define("MapChipSprite", {
         this.setPosition(this.xPos, this.yPos).setScale(1, 1);
         this.setInteractive(false);
         this.setBoundingType("rect");
-        this.gotoAndPlay("" + kind.mc_idx);
+        this.anim.gotoAndPlay("" + kind.mc_idx);
         this.alpha = 1;
         this.kind = kind;
         this.hp = kind.hp;
